@@ -3,4 +3,4 @@ project(computor_v1)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(computor_v1 main.cpp)
+add_executable(computor_v1 main.cpp ParserArgv.cpp ParserArgv.h)
