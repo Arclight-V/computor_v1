@@ -32,5 +32,5 @@
 *.app
 
 # Clion
-
 cmake-build-debug
+idea
