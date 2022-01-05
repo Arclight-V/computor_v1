@@ -2,16 +2,13 @@
 // Created by Anatashi on 04.01.2022.
 //
 
-#include <vector>
 #include <iostream>
 #include "ParserArgv.h"
 
 #define RED "\x1b[41m"
 #define NORMAL "\x1b[0m"
 
-ParserArgv::ParserArgv(const char* line) : line_(line) {
-
-}
+ParserArgv::ParserArgv(const char* line) : line_(line) {}
 
 void ParserArgv::printError(std::vector<bool> &error_index) {
     size_t i = 0;
@@ -37,16 +34,45 @@ void ParserArgv::printError(std::vector<bool> &error_index) {
 
 void ParserArgv::parse() {
     std::vector<bool> error_index(line_.size());
-    size_t i = 0;
 
-    while(isspace(line_[i])) {
-        ++i;
+    const char* ch = line_.c_str();
+
+    while(isspace(*ch)) {
+        ++ch;
     }
 
-    if (!isdigit(line_[i]) && line_[i] != 'X' && line_[i] != 'x') {
-        error_index[i] = true;
+    if (!isdigit(*ch) && *ch != 'X' && *ch != 'x') {
+        error_index[ch - line_.c_str()] = true;
     }
+
+    std::unique_ptr<block> s_ptr_block = std::make_unique<block>();
+
+    while (*ch) {
+        switch (*ch) {
+            case arithmetic_sign::multiply:
+                break;
+            case arithmetic_sign::degree:
+                break;
+            case arithmetic_sign::plus:
+                break;
+            case arithmetic_sign::minus:
+                break;
+            case arithmetic_sign::divide:
+                break;
+            case arithmetic_sign::equally:
+                break;
+            default:
+                if (isdigit(*ch)) {
+
+                } else {
+                    error_index[ch - line_.c_str()] = true;
+                }
+                break;
+        }
+
+        ++ch;
+    }
+
 
     printError(error_index);
-
 }

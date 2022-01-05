@@ -7,11 +7,10 @@
 
 
 #include <string>
+#include <vector>
 
 class ParserArgv {
 private:
-
-    std::string line_;
 
     enum arithmetic_sign {
         multiply = '*',
@@ -19,18 +18,37 @@ private:
         plus = '+',
         minus = '-',
         divide = '/',
-        equally = '='
+        equally = '=',
+        none
     };
 
-    struct block {
-        bool is_X;
-        arithmetic_sign for_X;
-        float num;
-        arithmetic_sign for_next_block;
+    class block {
+    public:
+        arithmetic_sign for_X_;
+        float num_;
+        float pow;
+        arithmetic_sign for_next_block_;
 
+
+        block() : for_X_(none),
+                  num_(0),
+                  for_next_block_(none) {};
+        block(bool is_X,
+              arithmetic_sign for_X,
+              float num,
+              arithmetic_sign for_next_block) : for_X_(for_X),
+                                                num_(num),
+                                                for_next_block_(for_next_block) {}
+        block(const block& rhs) = delete;
+        block& operator=(const block& rhs) = delete;
     };
 
-    void printError(std::vector<bool>& error_index) ;
+    using coefficients = std::vector<std::unique_ptr<block>>;
+
+    coefficients coef_;
+    const std::string line_;
+
+    void printError(std::vector<bool>& error_index);
 
 public:
     ParserArgv() = delete;
