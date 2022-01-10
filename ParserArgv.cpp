@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include "ParserArgv.h"
+#include "tools.h"
 
 #define RED "\x1b[41m"
 #define NORMAL "\x1b[0m"
@@ -30,10 +31,11 @@ void ParserArgv::printError(std::vector<bool> &error_index) {
     throw EXIT_FAILURE;
 }
 
-
-
 void ParserArgv::parse() {
     std::vector<bool> error_index(line_.size());
+
+    std::vector<std::string> vector(tools::ft_split(line_, "="));
+
 
     const char* ch = line_.c_str();
 
