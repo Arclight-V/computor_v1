@@ -9,9 +9,22 @@
 #define RED "\x1b[41m"
 #define NORMAL "\x1b[0m"
 
-ParserArgv::ParserArgv(const char* line) : line_(line) {}
+ParserArgv::ParserArgv(const char* line) :  line_(line),
+                                            error_index_(line_.size()) {
+    tokens_.reserve(line_.size());
+    token_line_.reserve(line_.size());
+}
 
-void ParserArgv::printError(std::vector<bool> &error_index) {
+void ParserArgv::CheckError() {
+    for (size_t i = 0; i < error_index_.size(); ++i) {
+        if (error_index_[i] == true) {
+            PrintError();
+            break;
+        }
+    }
+}
+
+void ParserArgv::PrintError() {
     size_t i = 0;
 
     while(isspace(line_[i])) {
@@ -20,7 +33,7 @@ void ParserArgv::printError(std::vector<bool> &error_index) {
 
     std::cout << "Error: ";
     for(; i < line_.size(); ++i) {
-        if (error_index[i] == true) {
+        if (error_index_[i] == true) {
             std::cout << RED << line_[i] << NORMAL;
         } else {
             std::cout << line_[i];
@@ -31,50 +44,135 @@ void ParserArgv::printError(std::vector<bool> &error_index) {
     throw EXIT_FAILURE;
 }
 
-void ParserArgv::parse() {
-    std::vector<bool> error_index(line_.size());
+void ParserArgv::analyzeTerm(std::string& line, size_t first, size_t last) {
 
-    std::vector<std::string> vector(tools::ft_split(line_, "="));
+//    double num = 0;
+//    double pow = 0;
+//    arithmetic_sign sign = arithmetic_sign::none;
+//    char* end;
+//
+//    for(; first <= last; ++first) {
+//        switch (line[first]) {
+//            case ' ':
+//                break;
+//            case arithmetic_sign::degree:
+//                try {
+//                    ++first;
+//                    pow = std::strtod(line.c_str() + first, &end);
+//                    std::string pow_str(std::to_string(pow));
+//                    first += pow_str.size() - 1;
+//                } catch (std::out_of_range) {
+//                    std::cout << "ERROR\n";
+//                    exit(1);
+//                }
+//                break;
+//            case arithmetic_sign::plus:
+//                sign = arithmetic_sign::plus;
+//                break;
+//            case arithmetic_sign::minus:
+//                sign = arithmetic_sign::minus;
+//                break;
+//            case 'X':
+//            case 'x':
+//                break;
+//            default:
+//                try {
+//                    num = std::strtod(line.c_str() +first, &end);
+//                    std::string num_str(std::to_string(num));
+//                    first += num_str.size() - 1;
+//                } catch (std::out_of_range) {
+//                    std::cout << "Error\n";
+//                    exit(1);
+//                }
+//                break;
+//        }
+//    }
 
+//    std::unique_ptr<block> s_ptr_block = std::make_unique<block>(num, pow, sign);
 
+//    coef_.push_back(std::move(s_ptr_block));
+}
+
+bool ParserArgv::IsPunctuator(char ch) {
+    if (ch == Punctuator::gap || ch == Punctuator::pow || ch == Punctuator::minus ||
+        ch == Punctuator::plus || ch == Punctuator::multiply || ch == Punctuator::dot ||
+        ch == Punctuator::equally) {
+        return true;
+    }
+    return false;
+}
+
+bool ParserArgv::IsKeyWord(char ch) {
+    if (ch == KeyWord::X_ || ch == KeyWord::x_) {
+        return true;
+    }
+    return false;
+}
+
+void ParserArgv::CreateTokens() {
     const char* ch = line_.c_str();
+    bool is_equally = false;
 
-    while(isspace(*ch)) {
+    while (*ch != '\0') {
+        if (!IsPunctuator(*ch) &&
+            !std::isdigit(*ch) &&
+            !IsKeyWord(*ch)) {
+            error_index_[ch - line_.c_str()] = true;
+        }
+        if (!(*ch == Punctuator::gap)) {
+            std::unique_ptr<Token> s_ptr_token = std::make_unique<Token>(*ch, ch - line_.c_str());
+            tokens_.push_back(std::move(s_ptr_token));
+        }
+        if (*ch == Punctuator::equally) {
+            if (!is_equally) {
+                is_equally = true;
+            } else {
+                error_index_[ch - line_.c_str()] = true;
+            }
+        }
         ++ch;
     }
 
-    if (!isdigit(*ch) && *ch != 'X' && *ch != 'x') {
-        error_index[ch - line_.c_str()] = true;
+    CheckError();
+    if (!is_equally) {
+        std::cout << "Error: the expression does not contain \"=\"";
+        throw EXIT_FAILURE;
     }
+}
 
-    std::unique_ptr<block> s_ptr_block = std::make_unique<block>();
 
-    while (*ch) {
+void ParserArgv::CheckTokens() {
+    const char* ch = token_line_.c_str();
+
+    while (*ch != '\0') {
         switch (*ch) {
-            case arithmetic_sign::multiply:
+            case Punctuator::plus:
                 break;
-            case arithmetic_sign::degree:
+            case Punctuator::minus:
                 break;
-            case arithmetic_sign::plus:
+            case Punctuator::multiply:
                 break;
-            case arithmetic_sign::minus:
+            case Punctuator::pow:
                 break;
-            case arithmetic_sign::divide:
+            case Punctuator::dot:
                 break;
-            case arithmetic_sign::equally:
+            case Punctuator::equally:
                 break;
             default:
-                if (isdigit(*ch)) {
-
-                } else {
-                    error_index[ch - line_.c_str()] = true;
+                ++ch;
+                if (*ch == KeyWord::X_ || *ch == KeyWord::x_) {
+                    std::cout << "Error: There should be a multiplication sign between the number and the claim";
                 }
                 break;
         }
-
-        ++ch;
     }
-
-
-    printError(error_index);
 }
+
+void ParserArgv::LexicalAnalyzer() {
+    CreateTokens();
+}
+
+void ParserArgv::parse() {
+    LexicalAnalyzer();
+}
+
