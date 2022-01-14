@@ -100,7 +100,6 @@ private:
 
     void analyzeTerm(std::string& line, size_t first, size_t last);
     void CheckError();
-    void PrintError();
 
 public:
     ParserArgv() = delete;

@@ -6,9 +6,6 @@
 #include "ParserArgv.h"
 #include "tools.h"
 
-#define RED "\x1b[41m"
-#define NORMAL "\x1b[0m"
-
 ParserArgv::ParserArgv(const char* line) :  line_(line),
                                             error_index_(line_.size()) {
     tokens_.reserve(line_.size());
@@ -24,25 +21,6 @@ void ParserArgv::CheckError() {
     }
 }
 
-void ParserArgv::PrintError() {
-    size_t i = 0;
-
-    while(isspace(line_[i])) {
-        ++i;
-    }
-
-    std::cout << "Error: ";
-    for(; i < line_.size(); ++i) {
-        if (error_index_[i] == true) {
-            std::cout << RED << line_[i] << NORMAL;
-        } else {
-            std::cout << line_[i];
-        }
-    }
-    std::cout << '\n';
-
-    throw EXIT_FAILURE;
-}
 
 void ParserArgv::analyzeTerm(std::string& line, size_t first, size_t last) {
 
@@ -142,10 +120,10 @@ void ParserArgv::CreateTokens() {
 
 
 void ParserArgv::CheckTokens() {
-    const char* ch = token_line_.c_str();
+    size_t i = 0;
+    while (i < tokens_.size())
 
-    while (*ch != '\0') {
-        switch (*ch) {
+        switch (tokens_[i]->getToken()) {
             case Punctuator::plus:
                 break;
             case Punctuator::minus:
@@ -159,8 +137,8 @@ void ParserArgv::CheckTokens() {
             case Punctuator::equally:
                 break;
             default:
-                ++ch;
-                if (*ch == KeyWord::X_ || *ch == KeyWord::x_) {
+                ++i;
+                if (tokens_[i]->getToken() == KeyWord::X_ || tokens_[i]->getToken() == KeyWord::x_) {
                     std::cout << "Error: There should be a multiplication sign between the number and the claim";
                 }
                 break;
