@@ -6,10 +6,19 @@
 #include "ParserArgv.h"
 #include "tools.h"
 
-ParserArgv::ParserArgv(const char* line) :  line_(line),
-                                            error_index_(line_.size()) {
+namespace {
+    constexpr char kInvalidCharacter[] = "invalid character";
+    constexpr char kManyEquals[] = "the expression must not contain more than one equal to";
+    constexpr char kNotEquals[] = "the expression does not contain \"=\"";
+}
+
+ParserArgv::ParserArgv(const char* line) :  line_(line)
+                                             {
     tokens_.reserve(line_.size());
     token_line_.reserve(line_.size());
+    errorManager_ = std::make_unique<ErrorManager>();
+
+
 }
 
 void ParserArgv::CheckError() {
@@ -19,56 +28,6 @@ void ParserArgv::CheckError() {
             break;
         }
     }
-}
-
-
-void ParserArgv::analyzeTerm(std::string& line, size_t first, size_t last) {
-
-//    double num = 0;
-//    double pow = 0;
-//    arithmetic_sign sign = arithmetic_sign::none;
-//    char* end;
-//
-//    for(; first <= last; ++first) {
-//        switch (line[first]) {
-//            case ' ':
-//                break;
-//            case arithmetic_sign::degree:
-//                try {
-//                    ++first;
-//                    pow = std::strtod(line.c_str() + first, &end);
-//                    std::string pow_str(std::to_string(pow));
-//                    first += pow_str.size() - 1;
-//                } catch (std::out_of_range) {
-//                    std::cout << "ERROR\n";
-//                    exit(1);
-//                }
-//                break;
-//            case arithmetic_sign::plus:
-//                sign = arithmetic_sign::plus;
-//                break;
-//            case arithmetic_sign::minus:
-//                sign = arithmetic_sign::minus;
-//                break;
-//            case 'X':
-//            case 'x':
-//                break;
-//            default:
-//                try {
-//                    num = std::strtod(line.c_str() +first, &end);
-//                    std::string num_str(std::to_string(num));
-//                    first += num_str.size() - 1;
-//                } catch (std::out_of_range) {
-//                    std::cout << "Error\n";
-//                    exit(1);
-//                }
-//                break;
-//        }
-//    }
-
-//    std::unique_ptr<block> s_ptr_block = std::make_unique<block>(num, pow, sign);
-
-//    coef_.push_back(std::move(s_ptr_block));
 }
 
 bool ParserArgv::IsPunctuator(char ch) {
@@ -95,7 +54,8 @@ void ParserArgv::CreateTokens() {
         if (!IsPunctuator(*ch) &&
             !std::isdigit(*ch) &&
             !IsKeyWord(*ch)) {
-            error_index_[ch - line_.c_str()] = true;
+             errorManager_->SetErrorIndex(ch - line_.c_str());
+             errorManager_.AddErrorMessage(kInvalidCharacter);
         }
         if (!(*ch == Punctuator::gap)) {
             std::unique_ptr<Token> s_ptr_token = std::make_unique<Token>(*ch, ch - line_.c_str());
@@ -105,7 +65,8 @@ void ParserArgv::CreateTokens() {
             if (!is_equally) {
                 is_equally = true;
             } else {
-                error_index_[ch - line_.c_str()] = true;
+                errorManager_.SetErrorIndex(ch - line_.c_str());
+                errorManager_.AddErrorMessage(kManyEquals);
             }
         }
         ++ch;
@@ -113,7 +74,8 @@ void ParserArgv::CreateTokens() {
 
     CheckError();
     if (!is_equally) {
-        std::cout << "Error: the expression does not contain \"=\"";
+        errorManager_.SetErrorIndex(line_.size());
+        errorManager_.AddErrorMessage(kNotEquals);
         throw EXIT_FAILURE;
     }
 }
@@ -121,7 +83,7 @@ void ParserArgv::CreateTokens() {
 
 void ParserArgv::CheckTokens() {
     size_t i = 0;
-    while (i < tokens_.size())
+    while (i < tokens_.size()) {
 
         switch (tokens_[i]->getToken()) {
             case Punctuator::plus:

@@ -9,6 +9,8 @@
 #include <list>
 #include <vector>
 
+#include "IErrorManager.h"
+
 #define RED "\x1b[41m"
 #define GREEN "\x1b[32m"
 #define NORMAL "\x1b[0m"
@@ -16,21 +18,25 @@
 using error_list = std::list<std::string>;
 using error_index = std::vector<bool>;
 
-class ErrorManager {
+class ErrorManager  : public IErrorManager {
 private:
     error_list errors_;
     error_index indexes_;
 
 public:
-    ErrorManager();
+    ErrorManager() = default;
 
     ErrorManager(const ErrorManager &rhs) = delete;
 
+    virtual ~ErrorManager();
+
     ErrorManager &operator=(const ErrorManager &rhs) = delete;
 
-    void PrintError(std::string& line_);
+    virtual void PrintError(std::string& line_);
 
     void SetErrorIndex(size_t position);
+
+    void AddErrorMessage(const std::string& message);
 };
 
 

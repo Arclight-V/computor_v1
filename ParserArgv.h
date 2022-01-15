@@ -9,6 +9,8 @@
 #include <string>
 #include <vector>
 
+#include "ErrorManager/ErrorManager.h"
+
 namespace {
     enum Punctuator {
         gap = ' ',
@@ -83,14 +85,15 @@ private:
 
     using coefficients = std::vector<std::unique_ptr<block>>;
     using token_vector = std::vector<std::unique_ptr<Token>>;
+    using error_handler = std::unique_ptr<ErrorManager>();
 
     coefficients coef_;
     token_vector tokens_;
 
     const std::string line_;
     std::string token_line_;
+    error_handler errorManager_;
 
-    std::vector<bool> error_index_;
 
     bool IsKeyWord(char ch);
     bool IsPunctuator(char ch);
@@ -98,7 +101,6 @@ private:
     void CheckTokens();
     void LexicalAnalyzer();
 
-    void analyzeTerm(std::string& line, size_t first, size_t last);
     void CheckError();
 
 public:

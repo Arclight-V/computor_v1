@@ -10,11 +10,6 @@ namespace {
     constexpr char kWhitespace = ' ';
 }
 
-
-ErrorManager::ErrorManager() {}
-
-
-
 void ErrorManager::PrintError(std::string& line) {
     std::string whitespaces;
     error_list::iterator begin = errors_.begin();
@@ -29,17 +24,12 @@ void ErrorManager::PrintError(std::string& line) {
         }
         whitespaces.push_back(kWhitespace);
     }
-
-    for (auto& elem: errors_) {
-        std::cout << line << "\n";
-        for (size_t i = 0; i < )
-        std::cout << elem << "\n";
-    }
-
-
-
 }
 
 void ErrorManager::SetErrorIndex(size_t position) {
     indexes_[position] = true;
+}
+
+void ErrorManager::AddErrorMessage(const std::string &message) {
+    errors_.push_back(message);
 }
