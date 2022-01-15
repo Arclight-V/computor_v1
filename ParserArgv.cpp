@@ -15,7 +15,7 @@ ParserArgv::ParserArgv(const char* line) :  line_(line),
 void ParserArgv::CheckError() {
     for (size_t i = 0; i < error_index_.size(); ++i) {
         if (error_index_[i] == true) {
-            PrintError();
+
             break;
         }
     }
