@@ -34,11 +34,15 @@ public:
 
     ErrorManager &operator=(const ErrorManager &rhs) = delete;
 
-    virtual void PrintError(const std::string& line_);
+    // IErrorManger
+    virtual void PrintErrors(const std::string& line_);
+    virtual void PrintError(const std::string& line);
 
     void SetErrorIndex(size_t position);
 
     void AddErrorMessage(const std::string& message);
+
+    bool isError() const;
 };
 
 

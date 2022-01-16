@@ -17,7 +17,7 @@ namespace {
 
 ErrorManager::ErrorManager(size_t size) : indexes_(size) {}
 
-void ErrorManager::PrintError(const std::string& line) {
+void ErrorManager::PrintErrors(const std::string& line) {
     std::string whitespaces;
     error_list::iterator begin = errors_.begin();
     whitespaces.reserve(indexes_.size());
@@ -33,10 +33,21 @@ void ErrorManager::PrintError(const std::string& line) {
     }
 }
 
+void ErrorManager::PrintError(const std::string &line) {
+    std::cout << RED << kError << NORMAL << line << '\n';
+}
+
 void ErrorManager::SetErrorIndex(size_t position) {
     indexes_[position] = true;
 }
 
 void ErrorManager::AddErrorMessage(const std::string &message) {
     errors_.push_back(message);
+}
+
+bool ErrorManager::isError() const {
+    if (errors_.size() > 0) {
+        return true;
+    }
+    return false;
 }

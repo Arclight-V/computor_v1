@@ -89,18 +89,13 @@ private:
 
     coefficients coef_;
     token_vector tokens_;
-
     const std::string line_;
-    std::string token_line_;
     error_handler errorManager_;
-
 
     bool IsKeyWord(char ch);
     bool IsPunctuator(char ch);
-    void CreateTokens();
-    void CheckTokens();
     void LexicalAnalyzer();
-
+    void SyntaxAnalyzer();
     void CheckError();
 
 public:

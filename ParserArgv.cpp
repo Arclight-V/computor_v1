@@ -10,20 +10,23 @@ namespace {
     constexpr char kInvalidCharacter[] = "invalid character";
     constexpr char kManyEquals[] = "the expression must not contain more than one equal to";
     constexpr char kNotEquals[] = "the expression does not contain \"=\"";
+//    constexpr char kNotClaim[] = "there should be a multiplication sign between the number and the claim";
+    constexpr char kNotPow[] = "there should be a multiplication sign between the number and the claim";
+
 }
 
 ParserArgv::ParserArgv(const char* line) :  line_(line)
                                              {
     tokens_.reserve(line_.size());
-    token_line_.reserve(line_.size());
     errorManager_ = std::make_unique<ErrorManager>(line_.size());
 
 
 }
 
 void ParserArgv::CheckError() {
-    if (errorManager_) {
-        errorManager_->PrintError(line_);
+    if (errorManager_->isError()) {
+        errorManager_->PrintErrors(line_);
+        throw EXIT_FAILURE;
     }
 }
 
@@ -43,7 +46,7 @@ bool ParserArgv::IsKeyWord(char ch) {
     return false;
 }
 
-void ParserArgv::CreateTokens() {
+void ParserArgv::LexicalAnalyzer() {
     const char* ch = line_.c_str();
     bool is_equally = false;
 
@@ -51,8 +54,8 @@ void ParserArgv::CreateTokens() {
         if (!IsPunctuator(*ch) &&
             !std::isdigit(*ch) &&
             !IsKeyWord(*ch)) {
-             errorManager_->SetErrorIndex(ch - line_.c_str());
-             errorManager_->AddErrorMessage(kInvalidCharacter);
+            errorManager_->SetErrorIndex(ch - line_.c_str());
+            errorManager_->AddErrorMessage(kInvalidCharacter);
         }
         if (!(*ch == Punctuator::gap)) {
             std::unique_ptr<Token> s_ptr_token = std::make_unique<Token>(*ch, ch - line_.c_str());
@@ -71,17 +74,16 @@ void ParserArgv::CreateTokens() {
 
     CheckError();
     if (!is_equally) {
-        errorManager_->SetErrorIndex(line_.size());
+        errorManager_->SetErrorIndex(line_.size() - 1);
         errorManager_->AddErrorMessage(kNotEquals);
+        errorManager_->PrintErrors(line_);
         throw EXIT_FAILURE;
     }
 }
 
-
-void ParserArgv::CheckTokens() {
+void ParserArgv::SyntaxAnalyzer() {
     size_t i = 0;
     while (i < tokens_.size()) {
-
         switch (tokens_[i]->getToken()) {
             case Punctuator::plus:
                 break;
@@ -95,21 +97,42 @@ void ParserArgv::CheckTokens() {
                 break;
             case Punctuator::equally:
                 break;
+            case KeyWord::X_:
+            case KeyWord::x_:
+                if (i + 1 < tokens_.size()) {
+                    ++i;
+                    char token = tokens_[i]->getToken();
+                    if (token != Punctuator::pow && token != Punctuator::minus && token != Punctuator::plus &&
+                        token != Punctuator::equally) {
+                        errorManager_->SetErrorIndex(tokens_[i]->getPosition() - 1);
+                        errorManager_->AddErrorMessage(kNotPow);
+                    }
+                    --i;
+                }
+
+                break;
+
             default:
-                ++i;
-                if (tokens_[i]->getToken() == KeyWord::X_ || tokens_[i]->getToken() == KeyWord::x_) {
-                    std::cout << "Error: There should be a multiplication sign between the number and the claim";
+                if (i + i < tokens_.size()) {
+                    ++i;
+//                    char token = tokens_[i]->getToken();
+//                    if (token == KeyWord::X_ || token == KeyWord::x_) {
+//                        errorManager_->SetErrorIndex(tokens_[i]->getPosition() - 1);
+//                        errorManager_->SetErrorIndex(tokens_[i]->getPosition());
+//                        errorManager_->AddErrorMessage(kNotClaim);
+//                    }
                 }
                 break;
         }
+        ++i;
     }
+
+    CheckError();
 }
 
-void ParserArgv::LexicalAnalyzer() {
-    CreateTokens();
-}
 
 void ParserArgv::parse() {
     LexicalAnalyzer();
+    SyntaxAnalyzer();
 }
 
