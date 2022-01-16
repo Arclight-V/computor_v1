@@ -11,7 +11,7 @@
 
 #include "IErrorManager.h"
 
-#define RED "\x1b[41m"
+#define RED "\x1b[31m"
 #define GREEN "\x1b[32m"
 #define NORMAL "\x1b[0m"
 
@@ -24,15 +24,17 @@ private:
     error_index indexes_;
 
 public:
-    ErrorManager() = default;
+    ErrorManager() = delete;
+
+    ErrorManager(size_t size);
 
     ErrorManager(const ErrorManager &rhs) = delete;
 
-    virtual ~ErrorManager();
+    virtual ~ErrorManager() {};
 
     ErrorManager &operator=(const ErrorManager &rhs) = delete;
 
-    virtual void PrintError(std::string& line_);
+    virtual void PrintError(const std::string& line_);
 
     void SetErrorIndex(size_t position);
 

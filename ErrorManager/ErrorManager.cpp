@@ -2,25 +2,32 @@
 // Created by Anatashi on 14.01.2022.
 //
 
+#include <iomanip>
+
 #include "ErrorManager.h"
+
 
 namespace {
     constexpr char kError[] = "error: ";
+    constexpr int kErrorLenght = 7;
     constexpr char kUnderline = '~';
+    constexpr char kLid = '^';
     constexpr char kWhitespace = ' ';
 }
 
-void ErrorManager::PrintError(std::string& line) {
+ErrorManager::ErrorManager(size_t size) : indexes_(size) {}
+
+void ErrorManager::PrintError(const std::string& line) {
     std::string whitespaces;
     error_list::iterator begin = errors_.begin();
     whitespaces.reserve(indexes_.size());
 
     for (size_t i = 0; i < indexes_.size(); ++i) {
         if (indexes_[i] == true) {
-            whitespaces.push_back(kUnderline);
-            std::cout << RED <<  kError << NORMAL
-                      << *begin << '\n' << GREEN
-                      << whitespaces << NORMAL << '\n';
+            whitespaces[kUnderline];
+            std::cout <<  RED <<  kError << NORMAL << *begin++ << '\n'
+                      << std::setfill(kWhitespace) << std::setw(kErrorLenght) << kWhitespace << line << '\n'
+                      << std::setfill(kWhitespace) << std::setw(i + kErrorLenght) << kWhitespace << GREEN << kLid << NORMAL << '\n';
         }
         whitespaces.push_back(kWhitespace);
     }

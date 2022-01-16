@@ -16,17 +16,14 @@ ParserArgv::ParserArgv(const char* line) :  line_(line)
                                              {
     tokens_.reserve(line_.size());
     token_line_.reserve(line_.size());
-    errorManager_ = std::make_unique<ErrorManager>();
+    errorManager_ = std::make_unique<ErrorManager>(line_.size());
 
 
 }
 
 void ParserArgv::CheckError() {
-    for (size_t i = 0; i < error_index_.size(); ++i) {
-        if (error_index_[i] == true) {
-
-            break;
-        }
+    if (errorManager_) {
+        errorManager_->PrintError(line_);
     }
 }
 
@@ -55,7 +52,7 @@ void ParserArgv::CreateTokens() {
             !std::isdigit(*ch) &&
             !IsKeyWord(*ch)) {
              errorManager_->SetErrorIndex(ch - line_.c_str());
-             errorManager_.AddErrorMessage(kInvalidCharacter);
+             errorManager_->AddErrorMessage(kInvalidCharacter);
         }
         if (!(*ch == Punctuator::gap)) {
             std::unique_ptr<Token> s_ptr_token = std::make_unique<Token>(*ch, ch - line_.c_str());
@@ -65,8 +62,8 @@ void ParserArgv::CreateTokens() {
             if (!is_equally) {
                 is_equally = true;
             } else {
-                errorManager_.SetErrorIndex(ch - line_.c_str());
-                errorManager_.AddErrorMessage(kManyEquals);
+                errorManager_->SetErrorIndex(ch - line_.c_str());
+                errorManager_->AddErrorMessage(kManyEquals);
             }
         }
         ++ch;
@@ -74,8 +71,8 @@ void ParserArgv::CreateTokens() {
 
     CheckError();
     if (!is_equally) {
-        errorManager_.SetErrorIndex(line_.size());
-        errorManager_.AddErrorMessage(kNotEquals);
+        errorManager_->SetErrorIndex(line_.size());
+        errorManager_->AddErrorMessage(kNotEquals);
         throw EXIT_FAILURE;
     }
 }

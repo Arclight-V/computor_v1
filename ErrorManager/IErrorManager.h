@@ -13,7 +13,7 @@ public:
 
     virtual ~IErrorManager()  = default;
 
-    virtual void PrintError(std::string& line_) = 0;
+    virtual void PrintError(const std::string& line_) = 0;
 };
 
 #endif //COMPUTOR_V1_IERRORMANAGER_H

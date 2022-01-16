@@ -85,7 +85,7 @@ private:
 
     using coefficients = std::vector<std::unique_ptr<block>>;
     using token_vector = std::vector<std::unique_ptr<Token>>;
-    using error_handler = std::unique_ptr<ErrorManager>();
+    using error_handler = std::unique_ptr<ErrorManager>;
 
     coefficients coef_;
     token_vector tokens_;
