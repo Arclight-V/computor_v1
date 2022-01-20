@@ -10,9 +10,7 @@ namespace {
     constexpr char kInvalidCharacter[] = "invalid character";
     constexpr char kManyEquals[] = "the expression must not contain more than one equal to";
     constexpr char kNotEquals[] = "the expression does not contain \"=\"";
-//    constexpr char kNotClaim[] = "there should be a multiplication sign between the number and the claim";
-    constexpr char kNotPow[] = "there should be a multiplication sign between the number and the claim";
-
+    constexpr char kInvalidEntry[] = "invalid entry";
 }
 
 ParserArgv::ParserArgv(const char* line) :  line_(line)
@@ -84,44 +82,33 @@ void ParserArgv::LexicalAnalyzer() {
 void ParserArgv::SyntaxAnalyzer() {
     size_t i = 0;
     while (i < tokens_.size()) {
-        switch (tokens_[i]->getToken()) {
+        size_t next = i + 1;
+        char token = tokens_[i]->getToken();
+
+        switch (token) {
             case Punctuator::plus:
-                break;
             case Punctuator::minus:
-                break;
             case Punctuator::multiply:
-                break;
-            case Punctuator::pow:
-                break;
-            case Punctuator::dot:
-                break;
             case Punctuator::equally:
+            case Punctuator::pow:
+            case Punctuator::dot: {
+                if (next == tokens_.size() ||
+                    (i == 0 && token != Punctuator::plus && token != Punctuator::minus) ||
+                    (next < tokens_.size() && (!std::isdigit(tokens_[next]->getToken()) && tokens_[next]->getToken() != KeyWord::X_ && tokens_[next]->getToken() != KeyWord::x_)) ||
+                    (token == Punctuator::dot && !std::isdigit(tokens_[next]->getToken()))) {
+                    errorManager_->SetErrorIndex(tokens_[i]->getPosition());
+                    errorManager_->AddErrorMessage(kInvalidEntry);
+                }
                 break;
+            }
             case KeyWord::X_:
             case KeyWord::x_:
-                if (i + 1 < tokens_.size()) {
-                    ++i;
-                    char token = tokens_[i]->getToken();
-                    if (token != Punctuator::pow && token != Punctuator::minus && token != Punctuator::plus &&
-                        token != Punctuator::equally) {
-                        errorManager_->SetErrorIndex(tokens_[i]->getPosition() - 1);
-                        errorManager_->AddErrorMessage(kNotPow);
-                    }
-                    --i;
+                if (next < tokens_.size() && tokens_[next]->getToken() == Punctuator::dot) {
+                    errorManager_->SetErrorIndex(tokens_[i]->getPosition());
+                    errorManager_->AddErrorMessage(kInvalidEntry);
                 }
-
                 break;
-
             default:
-                if (i + i < tokens_.size()) {
-                    ++i;
-//                    char token = tokens_[i]->getToken();
-//                    if (token == KeyWord::X_ || token == KeyWord::x_) {
-//                        errorManager_->SetErrorIndex(tokens_[i]->getPosition() - 1);
-//                        errorManager_->SetErrorIndex(tokens_[i]->getPosition());
-//                        errorManager_->AddErrorMessage(kNotClaim);
-//                    }
-                }
                 break;
         }
         ++i;
