@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "ParserArgv.h"
+#include "Computor_v1/Computor_v1.h"
 
 int main(int argc, char* argv[]) {
 
@@ -9,10 +9,10 @@ int main(int argc, char* argv[]) {
         exit(EXIT_FAILURE);
     }
 
-    ParserArgv parserArgv(argv[1]);
+    Computor_v1 Computor_v1(argv[1]);
 
     try {
-        parserArgv.parse();
+        Computor_v1.parse();
     } catch (int return_value) {
         exit(return_value);
     }

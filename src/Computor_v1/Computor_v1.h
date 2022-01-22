@@ -2,8 +2,8 @@
 // Created by Anatashi on 04.01.2022.
 //
 
-#ifndef COMPUTOR_V1_PARSERARGV_H
-#define COMPUTOR_V1_PARSERARGV_H
+#ifndef COMPUTOR_V1_Computor_v1_H
+#define COMPUTOR_V1_Computor_v1_H
 
 
 #include <string>
@@ -29,7 +29,7 @@ namespace {
     };
 } // namespace
 
-class ParserArgv {
+class Computor_v1 {
 private:
 
     class block {
@@ -99,13 +99,13 @@ private:
     void CheckError();
 
 public:
-    ParserArgv() = delete;
-    ParserArgv(const char* line);
-    ParserArgv(const ParserArgv& rhs) = delete;
-    ParserArgv& operator=(const ParserArgv& rhs) = delete;
+    Computor_v1() = delete;
+    Computor_v1(const char* line);
+    Computor_v1(const Computor_v1& rhs) = delete;
+    Computor_v1& operator=(const Computor_v1& rhs) = delete;
 
     void parse();
 };
 
 
-#endif //COMPUTOR_V1_PARSERARGV_H
+#endif //COMPUTOR_V1_Computor_v1_H

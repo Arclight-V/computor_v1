@@ -10,11 +10,10 @@
 // interface for the error manager
 class IErrorManager {
 public:
+    virtual ~IErrorManager() = default;
 
-    virtual ~IErrorManager()  = default;
-
-    virtual void PrintErrors(const std::string& line_) = 0;
-    virtual void PrintError(const std::string& line_) = 0;
+    virtual void PrintErrors(const std::string& line) = 0;
+    virtual void PrintError(const std::string& line) = 0;
 
 };
 

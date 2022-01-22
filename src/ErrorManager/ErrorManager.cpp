@@ -4,7 +4,7 @@
 
 #include <iomanip>
 
-#include "ErrorManager.h"
+#include "ErrorManager/ErrorManager.h"
 
 
 namespace {
@@ -29,9 +29,10 @@ void ErrorManager::PrintErrors(const std::string& line) {
     }
 }
 
-void ErrorManager::PrintError(const std::string &line) {
+void ErrorManager::PrintError(const std::string& line) {
     std::cout << RED << kError << NORMAL << line << '\n';
 }
+
 
 void ErrorManager::SetErrorIndex(size_t position) {
     indexes_[position] = true;

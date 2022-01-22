@@ -9,7 +9,7 @@
 #include <list>
 #include <vector>
 
-#include "IErrorManager.h"
+#include "ErrorManager/IErrorManager.h"
 
 #define RED "\x1b[31m"
 #define GREEN "\x1b[32m"
@@ -25,11 +25,8 @@ private:
 
 public:
     ErrorManager() = delete;
-
     ErrorManager(size_t size);
-
     ErrorManager(const ErrorManager &rhs) = delete;
-
     virtual ~ErrorManager() {};
 
     ErrorManager &operator=(const ErrorManager &rhs) = delete;
@@ -39,9 +36,7 @@ public:
     virtual void PrintError(const std::string& line);
 
     void SetErrorIndex(size_t position);
-
     void AddErrorMessage(const std::string& message);
-
     bool isError() const;
 };
 

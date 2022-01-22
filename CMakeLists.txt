@@ -3,4 +3,5 @@ project(computor_v1)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_FLAGS "-Wall -Wextra -Werror -Waddress")
-add_executable(computor_v1 main.cpp ParserArgv.cpp ParserArgv.h tools.cpp tools.h ErrorManager/ErrorManager.cpp ErrorManager/ErrorManager.h ErrorManager/IErrorManager.h)
+include_directories("src")
+add_executable(computor_v1 src/main.cpp src/Computor_v1/Computor_v1.cpp src/Computor_v1/Computor_v1.h src/tools/tools.cpp src/tools/tools.h src/ErrorManager/ErrorManager.cpp src/ErrorManager/ErrorManager.h src/ErrorManager/IErrorManager.h)

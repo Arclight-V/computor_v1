@@ -3,17 +3,18 @@
 //
 
 #include <iostream>
-#include "ParserArgv.h"
-#include "tools.h"
+#include "Computor_v1/Computor_v1.h"
+#include "tools/tools.h"
 
 namespace {
     constexpr char kInvalidCharacter[] = "invalid character";
     constexpr char kManyEquals[] = "the expression must not contain more than one equal to";
     constexpr char kNotEquals[] = "the expression does not contain \"=\"";
     constexpr char kInvalidEntry[] = "invalid entry";
+    constexpr char kEmptyLine[] = "empty line";
 }
 
-ParserArgv::ParserArgv(const char* line) :  line_(line)
+Computor_v1::Computor_v1(const char* line) :  line_(line)
                                              {
     tokens_.reserve(line_.size());
     errorManager_ = std::make_unique<ErrorManager>(line_.size());
@@ -21,14 +22,17 @@ ParserArgv::ParserArgv(const char* line) :  line_(line)
 
 }
 
-void ParserArgv::CheckError() {
+void Computor_v1::CheckError() {
     if (errorManager_->isError()) {
+#if defined(UNIT_TESTS)
+        throw line_;
+#endif
         errorManager_->PrintErrors(line_);
         throw EXIT_FAILURE;
     }
 }
 
-bool ParserArgv::IsPunctuator(char ch) {
+bool Computor_v1::IsPunctuator(char ch) {
     if (ch == Punctuator::gap || ch == Punctuator::pow || ch == Punctuator::minus ||
         ch == Punctuator::plus || ch == Punctuator::multiply || ch == Punctuator::dot ||
         ch == Punctuator::equally) {
@@ -37,15 +41,23 @@ bool ParserArgv::IsPunctuator(char ch) {
     return false;
 }
 
-bool ParserArgv::IsKeyWord(char ch) {
+bool Computor_v1::IsKeyWord(char ch) {
     if (ch == KeyWord::X_ || ch == KeyWord::x_) {
         return true;
     }
     return false;
 }
 
-void ParserArgv::LexicalAnalyzer() {
+void Computor_v1::LexicalAnalyzer() {
     const char* ch = line_.c_str();
+    if (*ch == '\0') {
+
+#if defined(UNIT_TESTS)
+        throw line_;
+#endif
+        errorManager_->PrintError(kEmptyLine);
+        throw EXIT_FAILURE;
+    }
     bool is_equally = false;
 
     while (*ch != '\0') {
@@ -72,6 +84,10 @@ void ParserArgv::LexicalAnalyzer() {
 
     CheckError();
     if (!is_equally) {
+
+#if defined(UNIT_TESTS)
+        throw line_;
+#endif
         errorManager_->SetErrorIndex(line_.size() - 1);
         errorManager_->AddErrorMessage(kNotEquals);
         errorManager_->PrintErrors(line_);
@@ -79,7 +95,7 @@ void ParserArgv::LexicalAnalyzer() {
     }
 }
 
-void ParserArgv::SyntaxAnalyzer() {
+void Computor_v1::SyntaxAnalyzer() {
     size_t i = 0;
     while (i < tokens_.size()) {
         size_t next = i + 1;
@@ -118,7 +134,7 @@ void ParserArgv::SyntaxAnalyzer() {
 }
 
 
-void ParserArgv::parse() {
+void Computor_v1::parse() {
     LexicalAnalyzer();
     SyntaxAnalyzer();
 }
