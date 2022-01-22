@@ -133,9 +133,46 @@ void Computor_v1::SyntaxAnalyzer() {
     CheckError();
 }
 
+void Computor_v1::CreateElements() {
+    std::string buf;
+    buf.reserve(tokens_.size());
+    double num = 0;
+    int pow = 0;
+
+    for (size_t i = 0; i < tokens_.size(); ++i) {
+        char token = tokens_[i]->getToken();
+
+        switch (token) {
+            case Punctuator::plus:
+            case Punctuator::minus:
+                break;
+            case Punctuator::multiply: {
+                char next_token = tokens_[i + 1]->getToken();
+                if (std::isdigit(next_token)) {
+
+                } else {
+
+                }
+                break;
+            }
+            case Punctuator::equally:
+            case Punctuator::pow:
+            case Punctuator::dot:
+                break;
+            case KeyWord::X_:
+            case KeyWord::x_:
+                break;
+            default:
+                buf.push_back(token);
+                break;
+        }
+    }
+}
+
 
 void Computor_v1::parse() {
     LexicalAnalyzer();
     SyntaxAnalyzer();
+    CreateElements();
 }
 

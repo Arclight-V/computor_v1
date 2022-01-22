@@ -9,7 +9,7 @@
 
 int main() {
 
-    std::vector<std::string> vec = {"hello",
+    std::vector<std::string> vec_invalid_values = {"hello",
                                      "",
                                      ".0",
                                      "5 * X^0.0. + 4 * X^1 - 9.3 * X^2 = 1 * X^0",
@@ -22,12 +22,13 @@ int main() {
                                      "5 * X^0.0. + 4 * X^1 - 9.3 * X^2 = *1 * X^0",
                                      "5 * X^0.0. + 4 * X^1 - 9.3 * X^2 = 1 * X^*",
                                     "5 * X^0.0. + 4 * X^1 - 9.3 * X^2 = 1 * ",
-                                    "*5 * X^0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0"
+                                    "*5 * X^0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0",
+                                    "5 * X^-0 + 4 * X^-1 - 9.3 * X^2 = 1 * X^0",
+                                    "5 * X^.0 + 4 * X^-1 - 9.3 * X^2 = 1 * X^0"
                                      };
 
-    for (auto& elem : vec) {
+    for (auto& elem : vec_invalid_values) {
         Computor_v1 computorV1(elem.c_str());
-
         try {
             computorV1.parse();
         } catch (std::string str) {

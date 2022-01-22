@@ -32,23 +32,24 @@ namespace {
 class Computor_v1 {
 private:
 
-    class block {
+    class Element {
     public:
         double num_;
         int pow_;
         Punctuator sign_;
+        bool is_fool_form_ = false;
 
-        block() : num_(0),
+        Element() : num_(0),
                   pow_(0),
                   sign_(none) {};
-        block(double num,
+        Element(double num,
               double pow,
               Punctuator sign) : num_(num),
                                  pow_(pow),
                                  sign_(sign) {
         }
-        block(const block& rhs) = delete;
-        block& operator=(const block& rhs) = delete;
+        Element(const Element& rhs) = delete;
+        Element& operator=(const Element& rhs) = delete;
     };
 
     /*
@@ -83,7 +84,7 @@ private:
         };
     };
 
-    using coefficients = std::vector<std::unique_ptr<block>>;
+    using coefficients = std::vector<std::unique_ptr<Element>>;
     using token_vector = std::vector<std::unique_ptr<Token>>;
     using error_handler = std::unique_ptr<ErrorManager>;
 
@@ -96,6 +97,7 @@ private:
     bool IsPunctuator(char ch);
     void LexicalAnalyzer();
     void SyntaxAnalyzer();
+    void CreateElements();
     void CheckError();
 
 public:
