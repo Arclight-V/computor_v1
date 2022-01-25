@@ -12,6 +12,7 @@ namespace {
     constexpr char kNotEquals[] = "the expression does not contain \"=\"";
     constexpr char kInvalidEntry[] = "invalid entry";
     constexpr char kEmptyLine[] = "empty line";
+    constexpr char kOutOfRange[] = "the converted value would fall out of the range of the result type";
 }
 
 Computor_v1::Computor_v1(const char* line) :  line_(line)
@@ -138,26 +139,42 @@ void Computor_v1::CreateElements() {
     buf.reserve(tokens_.size());
     double num = 0;
     int pow = 0;
+    std::unique_ptr<Element> elem_ptr;
 
     for (size_t i = 0; i < tokens_.size(); ++i) {
         char token = tokens_[i]->getToken();
+
+
+         // TODO
+         // implement an algorithm to search for all digits after the token
 
         switch (token) {
             case Punctuator::plus:
             case Punctuator::minus:
                 break;
             case Punctuator::multiply: {
-                char next_token = tokens_[i + 1]->getToken();
+                // after '*' can be 'digit' or '*'
+                 char next_token = tokens_[i + 1]->getToken();
                 if (std::isdigit(next_token)) {
-
-                } else {
-
+                    try {
+                        elem_ptr->num_ = std::stod(buf);
+                    } catch (std::out_of_range) {
+                        errorManager_->SetErrorIndex(tokens_[i]->getPosition());
+                        errorManager_->AddErrorMessage(kOutOfRange);
+                        errorManager_->PrintErrors(line_);
+                        throw EXIT_FAILURE;
+                    }
+                    coef_.push_back(std::move(elem_ptr));
+                    buf.clear();
+                    elem_ptr = CreateUniqElement();
                 }
                 break;
             }
             case Punctuator::equally:
             case Punctuator::pow:
+                buf.push_back(tokens_[i + 1]->getToken());
             case Punctuator::dot:
+                buf.push_back(token);
                 break;
             case KeyWord::X_:
             case KeyWord::x_:
@@ -176,3 +193,6 @@ void Computor_v1::parse() {
     CreateElements();
 }
 
+Computor_v1::Element::Element() :   num_(0),
+                                    pow_(0),
+                                    sign_(none) {};

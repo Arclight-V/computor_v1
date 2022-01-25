@@ -29,6 +29,7 @@ namespace {
     };
 } // namespace
 
+
 class Computor_v1 {
 private:
 
@@ -37,19 +38,13 @@ private:
         double num_;
         int pow_;
         Punctuator sign_;
-        bool is_fool_form_ = false;
 
-        Element() : num_(0),
-                  pow_(0),
-                  sign_(none) {};
-        Element(double num,
-              double pow,
-              Punctuator sign) : num_(num),
-                                 pow_(pow),
-                                 sign_(sign) {
-        }
+        virtual ~Element() = default;
+
+        Element();
         Element(const Element& rhs) = delete;
         Element& operator=(const Element& rhs) = delete;
+
     };
 
     /*
@@ -66,6 +61,8 @@ private:
                                              position_(position) {};
         Token(const Token& rhs) = delete;
         Token& operator=(const Token& rhs) = delete;
+
+        virtual ~Token() = default;
 
         char getToken() const {
             return token_;
@@ -99,6 +96,7 @@ private:
     void SyntaxAnalyzer();
     void CreateElements();
     void CheckError();
+    std::unique_ptr<Element> CreateUniqElement() { return std::make_unique<Element>();};
 
 public:
     Computor_v1() = delete;
