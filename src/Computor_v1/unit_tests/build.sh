@@ -2,5 +2,5 @@
 mkdir build
 cd build
 cmake ../
-make
+make &&
 ./computor_v1_unit_tests

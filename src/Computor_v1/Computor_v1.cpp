@@ -135,29 +135,44 @@ void Computor_v1::SyntaxAnalyzer() {
 }
 
 void Computor_v1::CreateElements() {
-    std::string buf;
-    buf.reserve(tokens_.size());
+    std::string buf_elem;
+    std::string buf_pow;
+    buf_elem.reserve(tokens_.size());
+    buf_pow.reserve(tokens_.size());
     double num = 0;
     int pow = 0;
-    std::unique_ptr<Element> elem_ptr;
+    bool is_full_form = false;
+    std::unique_ptr<Element> elem_ptr = CreateUniqElement();
 
     for (size_t i = 0; i < tokens_.size(); ++i) {
         char token = tokens_[i]->getToken();
 
-
-         // TODO
-         // implement an algorithm to search for all digits after the token
-
         switch (token) {
             case Punctuator::plus:
             case Punctuator::minus:
+                elem_ptr = CreateUniqElement();
+                if (!buf_elem.empty()) {
+                    try {
+                        num = std::stod(buf_elem);
+                    } catch (std::out_of_range) {
+                        errorManager_->SetErrorIndex(tokens_[i]->getPosition());
+                        errorManager_->AddErrorMessage(kOutOfRange);
+                        errorManager_->PrintErrors(line_);
+                        throw EXIT_FAILURE;
+                    }
+                }
+                elem_ptr->setNum(num);
+                elem_ptr->setPow(pow);
+                elem_ptr->setIsFulForm(is_full_form);
+                elem_ptr->setSign(static_cast<Punctuator>(token));
+                coef_.push_back(std::move(elem_ptr));
                 break;
             case Punctuator::multiply: {
-                // after '*' can be 'digit' or '*'
+                // after '*' can be 'digit' or 'X' or 'x'
                  char next_token = tokens_[i + 1]->getToken();
                 if (std::isdigit(next_token)) {
                     try {
-                        elem_ptr->num_ = std::stod(buf);
+//                        elem_ptr->  std::stod(buf);
                     } catch (std::out_of_range) {
                         errorManager_->SetErrorIndex(tokens_[i]->getPosition());
                         errorManager_->AddErrorMessage(kOutOfRange);
@@ -165,22 +180,22 @@ void Computor_v1::CreateElements() {
                         throw EXIT_FAILURE;
                     }
                     coef_.push_back(std::move(elem_ptr));
-                    buf.clear();
-                    elem_ptr = CreateUniqElement();
+                    buf_elem.clear();
                 }
                 break;
             }
             case Punctuator::equally:
             case Punctuator::pow:
-                buf.push_back(tokens_[i + 1]->getToken());
+                buf_elem.push_back(tokens_[i + 1]->getToken());
             case Punctuator::dot:
-                buf.push_back(token);
+                buf_elem.push_back(token);
                 break;
             case KeyWord::X_:
             case KeyWord::x_:
+                is_full_form = true;
                 break;
             default:
-                buf.push_back(token);
+                buf_elem.push_back(token);
                 break;
         }
     }
@@ -195,4 +210,37 @@ void Computor_v1::parse() {
 
 Computor_v1::Element::Element() :   num_(0),
                                     pow_(0),
-                                    sign_(none) {};
+                                    sign_(none),
+                                    is_ful_form_(false) {}
+
+double Computor_v1::Element::getNum() const {
+    return num_;
+}
+
+void Computor_v1::Element::setNum(double num) {
+    num_ = num;
+}
+
+int Computor_v1::Element::getPow() const {
+    return pow_;
+}
+
+void Computor_v1::Element::setPow(int pow) {
+    pow_ = pow;
+}
+
+Punctuator Computor_v1::Element::getSign() const {
+    return sign_;
+}
+
+void Computor_v1::Element::setSign(Punctuator sign) {
+    sign_ = sign;
+}
+
+bool Computor_v1::Element::isFulForm() const {
+    return is_ful_form_;
+}
+
+void Computor_v1::Element::setIsFulForm(bool isFulForm) {
+    is_ful_form_ = isFulForm;
+};

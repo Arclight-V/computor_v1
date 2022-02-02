@@ -34,16 +34,33 @@ class Computor_v1 {
 private:
 
     class Element {
-    public:
+    private:
         double num_;
         int pow_;
         Punctuator sign_;
-
+        bool is_ful_form_;
+    public:
         virtual ~Element() = default;
 
         Element();
         Element(const Element& rhs) = delete;
         Element& operator=(const Element& rhs) = delete;
+
+        double getNum() const;
+
+        void setNum(double num);
+
+        int getPow() const;
+
+        void setPow(int pow);
+
+        Punctuator getSign() const;
+
+        void setSign(Punctuator sign);
+
+        bool isFulForm() const;
+
+        void setIsFulForm(bool isFulForm);
 
     };
 
