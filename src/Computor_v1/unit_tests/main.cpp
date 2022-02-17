@@ -30,6 +30,7 @@ int main() {
                                     "5 * X^-0 + 4 * X^-1 - 9.3 * X^2 = 1 * X^0",
                                     "5 * X^.0 + 4 * X^-1 - 9.3 * X^2 = 1 * X^0",
                                     "5 * X^5^005 + 4 * X^1 - 9.3 * X^2 = 1 * X^0",
+                                    "5 * X^5^0^05 + 4 * X^1 - 9.3 * X^2 = 1 * X^0"
                                      };
     std::vector<std::string> vec_values;
     vec_values.reserve(vec_invalid_values.size());

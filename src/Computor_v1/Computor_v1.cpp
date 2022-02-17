@@ -120,7 +120,9 @@ void Computor_v1::SyntaxAnalyzer() {
             }
             case KeyWord::X_:
             case KeyWord::x_:
-                if (next < tokens_.size() && tokens_[next]->getToken() == Punctuator::dot) {
+                if (next < tokens_.size() &&
+                    (tokens_[next]->getToken() == Punctuator::dot ||
+                    std::isdigit(tokens_[i - 1]->getToken())) ) {
                     errorManager_->SetErrorIndex(tokens_[i]->getPosition());
                     errorManager_->AddErrorMessage(kInvalidEntry);
                 }
