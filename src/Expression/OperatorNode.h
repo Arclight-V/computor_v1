@@ -7,7 +7,9 @@
 
 #include "Expression/Node.h"
 
-class OperatorNode : private Node  {
+using::expression::NodeType;
+
+class OperatorNode : public Node  {
 private:
     char value_;
 public:
@@ -16,9 +18,11 @@ public:
     OperatorNode& operator=(const OperatorNode& rhs) = delete;
     virtual ~OperatorNode() = default;
 
-    OperatorNode(char value) : value_(value) {}
+    OperatorNode(NodeType type) : Node(type) {};
+    OperatorNode(NodeType type, char value) : Node(type),  value_(value) {};
 
-    char getOperator() const { return value_; }
+    char getOperator() const { return value_; };
+    void setOperator(char value) {value_ = value; };
 };
 
 #endif //COMPUTOR_V1_OPERATORNODE_H

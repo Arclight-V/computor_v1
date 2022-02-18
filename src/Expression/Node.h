@@ -5,23 +5,36 @@
 #ifndef COMPUTOR_V1_NODE_H
 #define COMPUTOR_V1_NODE_H
 
-using node = std::unique_ptr<IExpressionNode>;
+#include <memory>
+#include "Expression/IExpressionNode.h"
+
+namespace expression {
+    enum NodeType {
+        base,
+        oper,
+        unknown,
+        number,
+    };
+}
+
+using expression::NodeType;
 
 class Node : public IExpressionNode {
-protected:
+    using node = std::unique_ptr<Node>;
+private:
     node left_;
     node right_;
-public:
+    const NodeType type_;
 
+public:
     Node() = delete;
     Node(const Node& rhs) = delete;
     Node& operator=(const Node& rhs) = delete;
-    virtual ~Node() = default
+    virtual ~Node() = default;
 
-    Node(char value) { value_ = value; }
+    Node(NodeType type) : type_(type) {};
 
     void setLeftNode(node left) { left_ = std::move(left); }
-
     void setRightNode(node right) { right_ = std::move(right); }
 
 };

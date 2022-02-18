@@ -7,7 +7,9 @@
 
 #include "Expression/Node.h"
 
-class UnknownNode : private Node {
+using expression::NodeType;
+
+class UnknownNode : public Node {
 private:
     char value_;
     int pow_ = 0;
@@ -17,7 +19,8 @@ public:
     UnknownNode& operator=(const UnknownNode& rhs) = delete;
     virtual ~UnknownNode() = default;
 
-    UnknownNode(char value) : value_(value) {}
+    UnknownNode(NodeType type) : Node(type) {}
+    UnknownNode(NodeType type, char value) : Node(type), value_(value) {}
 
     char getValue() const { return value_; }
     void setPow(int pow) {pow_ = pow; }
