@@ -13,11 +13,10 @@ namespace expression {
         base,
         oper,
         unknown,
-        number,
+        number
     };
 }
-
-using expression::NodeType;
+using namespace expression;
 
 class Node : public IExpressionNode {
     using node = std::unique_ptr<Node>;
@@ -27,15 +26,16 @@ private:
     const NodeType type_;
 
 public:
-    Node() = delete;
+    Node() : type_(NodeType::base) {}
+    Node(NodeType type) : type_(type) {}
     Node(const Node& rhs) = delete;
     Node& operator=(const Node& rhs) = delete;
     virtual ~Node() = default;
 
-    Node(NodeType type) : type_(type) {};
-
     void setLeftNode(node left) { left_ = std::move(left); }
     void setRightNode(node right) { right_ = std::move(right); }
+
+    NodeType getNodeType() const { return type_; }
 
 };
 
