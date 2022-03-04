@@ -20,6 +20,8 @@ namespace {
         pow = '^',
         dot = '.',
         equally = '=',
+        left_bracket = '(',
+        right_bracket = ')',
         none
     };
 
@@ -105,13 +107,18 @@ private:
     coefficients coef_;
     token_vector tokens_;
     const std::string line_;
+    std::string reverse_polish_notation_;
     error_handler errorManager_;
 
     bool IsKeyWord(char ch);
     bool IsPunctuator(char ch);
     void LexicalAnalyzer();
+    void LexicalAnalyzer_v2();
     void SyntaxAnalyzer();
+    void SyntaxAnalyzer_v2();
     void CreateElements();
+    // Shunting Yard Algorithm
+    void ShuntingAlgorithm();
     void CheckError();
     std::unique_ptr<Element> CreateUniqElement() { return std::make_unique<Element>();};
 
