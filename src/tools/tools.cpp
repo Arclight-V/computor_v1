@@ -20,4 +20,10 @@ namespace tools {
         return vec;
     }
 
+    void ft_delete_all_elem(std::string& str, char to_delete) {
+        for (size_t i = 0, j = 1; j < str.size(); ++i) {
+
+        }
+    }
+
 }
