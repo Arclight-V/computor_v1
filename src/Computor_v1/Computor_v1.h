@@ -8,6 +8,7 @@
 
 #include <string>
 #include <vector>
+#include <algorithm>
 
 #include "ErrorManager/ErrorManager.h"
 
@@ -103,23 +104,28 @@ private:
     using coefficients = std::vector<std::unique_ptr<Element>>;
     using token_vector = std::vector<std::unique_ptr<Token>>;
     using error_handler = std::unique_ptr<ErrorManager>;
+    using token = char;
+    using token_vector2 = std::vector<token>;
 
     coefficients coef_;
     token_vector tokens_;
-    const std::string line_;
+    std::string line_;
     std::string reverse_polish_notation_;
     error_handler errorManager_;
+    token_vector2 tokenVector2_;
 
     bool IsKeyWord(char ch);
     bool IsPunctuator(char ch);
     void LexicalAnalyzer();
     void LexicalAnalyzer_v2();
     void SyntaxAnalyzer();
-    void SyntaxAnalyzer_v2();
+    size_t SyntaxAnalyzer_v2();
+    void MoveTokenToLeftFromEqually(size_t position);
     void CreateElements();
     // Shunting Yard Algorithm
     void ShuntingAlgorithm();
     void CheckError();
+
     std::unique_ptr<Element> CreateUniqElement() { return std::make_unique<Element>();};
 
 public:
