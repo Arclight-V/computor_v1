@@ -116,11 +116,10 @@ private:
 
     bool IsKeyWord(char ch);
     bool IsPunctuator(char ch);
-    void LexicalAnalyzer();
-    void LexicalAnalyzer_v2();
-    void SyntaxAnalyzer();
-    size_t SyntaxAnalyzer_v2();
-    void MoveTokenToLeftFromEqually(size_t position);
+    bool LexicalAnalyzer();
+    bool SyntaxAnalyzer();
+    void MoveTokenToLeftFromEqually();
+    void ChangeMinusToPlus(std::string& str);
     void CreateElements();
     // Shunting Yard Algorithm
     void ShuntingAlgorithm();
@@ -134,7 +133,9 @@ public:
     Computor_v1(const Computor_v1& rhs) = delete;
     Computor_v1& operator=(const Computor_v1& rhs) = delete;
 
-    void parse();
+    bool parse();
+    void PrintSolution();
+    void PrintError();
 };
 
 

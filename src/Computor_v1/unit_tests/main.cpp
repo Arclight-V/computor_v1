@@ -3,6 +3,8 @@
 //
 #include <iostream>
 #include <vector>
+#include <unordered_map>
+#include <algorithm>
 
 #include "Computor_v1/Computor_v1.h"
 
@@ -11,21 +13,34 @@
 #define NORMAL "\x1b[0m"
 
 void checkMoveTokenToLeftFromEqually() {
-    std::vector<std::string> values = { "5 * X^0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0",
-                                        "5 * X^0 + 4 * X^1 - 9.3 * X^2 = -1 * X^0",
-                                        "5 * X^0 + 4 * X^1 - 9.3 * X^2 = +1 * X^0",
-                                        "5 * X^0 + 4 * X^1 - 9.3 * X^2 = 0",
-                                        "5 * X^0 + 4 * X^1 - 9.3 * X^2 = -1",
-                                        "1 * X^0 = 5 * X^0 + 4 * X^1 - 9.3 * X^2",
-                                        "X^0 = 5 * X^0 + 4 * X^1 - 9.3 * X^2",
-                                        "0 = 5 * X^0 + 4 * X^1 - 9.3 * X^2",
-
+    std::unordered_map <std::string, std::string> values =  {
+            {"5 * X^0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0", "5*X^0+4*X^1-9.3*X^2-1*X^0=0"},
+            {"5 * X^0 + 4*X^1 - 9.3 * X^2= -1 * X^0", "5*X^0+4*X^1-9.3*X^2+1*X^0=0"},
+            {"5 * X^0 + 4 * X^1 - 9.3 * X^2 = +1 * X^0", "5*X^0+4*X^1-9.3*X^2-1*X^0=0"},
+            {"5 *X^0 + 4 * X^1 - 9.3 * X^2 = 0", "5*X^0+4*X^1-9.3*X^2=0"},
+            {"5 * X^0 + 4 * X^1 - 9.3 * X^2 = -1", "5*X^0+4*X^1-9.3*X^2+1=0"},
+            {"1 * X^0 = 5 * X^0 + 4 * X^1 - 9.3 * X^2", "1*X^0-5*X^0-4*X^1+9.3*X^2=0"},
+            {"X^0 = 5 * X^0 + 4 * X^1 - 9.3 * X^2", "5*X^0+4*X^1-9.3*X^2-X^0=0"},
+            {"0 = 5 * X^0 + 4 * X^1 - 9.3 * X^2", "5*X^0+4*X^1-9.3*X^2=0"}
     };
 
-    for (auto& elem : values) {
-        Computor_v1 computorV1(elem.c_str());
-        computorV1.parse();
-
+    std::cout << "Move token to left from equally test" << "\n";
+    int i = 0;
+    for (const auto& [key, value] : values) {
+//        std::cout << key.c_str() << "\n";
+        Computor_v1 computorV1(key.c_str());
+        std::cout << "Test " << ++i << " ";
+        try {
+            computorV1.parse();
+        } catch (std::string str) {
+            if (str != value) {
+                std::cout << RED << "FAILURE" << '\n';
+                std::cout << value << "\n" << GREEN << str << '\n' << NORMAL;
+            } else {
+                std::cout << GREEN << "OK" << '\n' << NORMAL;
+                std::cout << value << "\n" << GREEN << str << '\n' << NORMAL;
+            }
+        }
     }
 }
 
@@ -48,7 +63,7 @@ void checkInvalidValues() {
                                                    "5 * X^.0 + 4 * X^-1 - 9.3 * X^2 = 1 * X^0",
                                                    "5 * X^5^005 + 4 * X^1 - 9.3 * X^2 = 1 * X^0",
                                                    "5 * X^5^0^05 + 4 * X^1 - 9.3 * X^2 = 1 * X^0"
-    };
+                                                    };
     std::vector<std::string> vec_values;
     vec_values.reserve(vec_invalid_values.size());
 
@@ -68,11 +83,11 @@ void checkInvalidValues() {
             std::cout << GREEN << "OK" << '\n' << NORMAL;
         }
     }
-
 }
 
 int main() {
-//    checkInvalidValues();
-    checkMoveTokenToLeftFromEqually();
+    checkInvalidValues();
+//    checkMoveTokenToLeftFromEqually();
 
+    return 0;
 }

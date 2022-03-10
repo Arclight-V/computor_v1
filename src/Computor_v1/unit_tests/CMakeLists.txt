@@ -10,4 +10,6 @@ add_executable(computor_v1_unit_tests   main.cpp
                                         ../Computor_v1.h
                                         ../../ErrorManager/ErrorManager.cpp
                                         ../../ErrorManager/ErrorManager.h
-                                        ../../ErrorManager/IErrorManager.h)
+                                        ../../ErrorManager/IErrorManager.h
+                                        ../../tools/tools.cpp
+                                        ../../tools/tools.h)

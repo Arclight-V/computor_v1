@@ -9,7 +9,7 @@
 namespace {
     constexpr char kInvalidCharacter[] = "invalid character";
     constexpr char kManyEquals[] = "the expression must not contain more than one equal to";
-    constexpr char kNotEquals[] = "the expression does not contain \"=\"";
+//    constexpr char kNotEquals[] = "the expression does not contain \"=\"";
     constexpr char kInvalidEntry[] = "invalid entry";
     constexpr char kEmptyLine[] = "empty line";
     constexpr char kOutOfRange[] = "the converted value would fall out of the range of the result type";
@@ -20,7 +20,7 @@ Computor_v1::Computor_v1(const char* line) :  line_(line)
     tokens_.reserve(line_.size());
     reverse_polish_notation_.reserve(line_.size());
     tokenVector2_.reserve(line_.size());
-    errorManager_ = std::make_unique<ErrorManager>(line_.size());
+    errorManager_ = std::make_unique<ErrorManager>(line_.size() == 0 ? 1 : line_.size());
 }
 
 void Computor_v1::CheckError() {
@@ -49,54 +49,7 @@ bool Computor_v1::IsKeyWord(char ch) {
     return false;
 }
 
-void Computor_v1::LexicalAnalyzer() {
-    const char* ch = line_.c_str();
-    if (*ch == '\0') {
-
-#if defined(UNIT_TESTS)
-        throw line_;
-#endif
-        errorManager_->PrintError(kEmptyLine);
-        throw EXIT_FAILURE;
-    }
-    bool is_equally = false;
-
-    while (*ch != '\0') {
-        if (!IsPunctuator(*ch) &&
-            !std::isdigit(*ch) &&
-            !IsKeyWord(*ch)) {
-            errorManager_->SetErrorIndex(ch - line_.c_str());
-            errorManager_->AddErrorMessage(kInvalidCharacter);
-        }
-        if (!(*ch == Punctuator::gap)) {
-            std::unique_ptr<Token> s_ptr_token = std::make_unique<Token>(*ch, ch - line_.c_str());
-            tokens_.push_back(std::move(s_ptr_token));
-        }
-        if (*ch == Punctuator::equally) {
-            if (!is_equally) {
-                is_equally = true;
-            } else {
-                errorManager_->SetErrorIndex(ch - line_.c_str());
-                errorManager_->AddErrorMessage(kManyEquals);
-            }
-        }
-        ++ch;
-    }
-
-    CheckError();
-    if (!is_equally) {
-
-#if defined(UNIT_TESTS)
-        throw line_;
-#endif
-        errorManager_->SetErrorIndex(line_.size() - 1);
-        errorManager_->AddErrorMessage(kNotEquals);
-        errorManager_->PrintErrors(line_);
-        throw EXIT_FAILURE;
-    }
-}
-
-void Computor_v1::LexicalAnalyzer_v2() {
+bool Computor_v1::LexicalAnalyzer() {
     const char* ch = line_.c_str();
     for (; *ch; ++ch) {
         if (!IsPunctuator(*ch) &&
@@ -109,52 +62,18 @@ void Computor_v1::LexicalAnalyzer_v2() {
             tokenVector2_.push_back(*ch);
         }
     }
-}
 
-
-void Computor_v1::SyntaxAnalyzer() {
-    size_t i = 0;
-    while (i < tokens_.size()) {
-        size_t next = i + 1;
-        char token = tokens_[i]->getToken();
-
-        switch (token) {
-            case Punctuator::plus:
-            case Punctuator::minus:
-            case Punctuator::multiply:
-            case Punctuator::equally:
-            case Punctuator::pow:
-            case Punctuator::dot: {
-                if (next == tokens_.size() ||
-                    (i == 0 && token != Punctuator::plus && token != Punctuator::minus) ||
-                    (next < tokens_.size() && (!std::isdigit(tokens_[next]->getToken()) && tokens_[next]->getToken() != KeyWord::X_ && tokens_[next]->getToken() != KeyWord::x_)) ||
-                    (token == Punctuator::dot && !std::isdigit(tokens_[next]->getToken()))) {
-                    errorManager_->SetErrorIndex(tokens_[i]->getPosition());
-                    errorManager_->AddErrorMessage(kInvalidEntry);
-                }
-                break;
-            }
-            case KeyWord::X_:
-            case KeyWord::x_:
-                if (next < tokens_.size() &&
-                    (tokens_[next]->getToken() == Punctuator::dot ||
-                    std::isdigit(tokens_[i - 1]->getToken())) ) {
-                    errorManager_->SetErrorIndex(tokens_[i]->getPosition());
-                    errorManager_->AddErrorMessage(kInvalidEntry);
-                }
-                break;
-            default:
-                break;
-        }
-        ++i;
+    if (errorManager_->isError()) {
+#if defined(UNIT_TESTS)
+        throw line_;
+#endif
+        return false;
     }
-
-    CheckError();
+    return true;
 }
 
-size_t Computor_v1::SyntaxAnalyzer_v2() {
+bool Computor_v1::SyntaxAnalyzer() {
     bool is_equally = false;
-    size_t pos_equally = 0;
     for (size_t i = 0; i < tokenVector2_.size(); ++i) {
         const size_t next = i + 1;
         const char token = tokenVector2_[i];
@@ -164,7 +83,6 @@ size_t Computor_v1::SyntaxAnalyzer_v2() {
             case Punctuator::plus:
             case Punctuator::minus:
             case Punctuator::multiply:
-            case Punctuator::equally:
             case Punctuator::pow:
             case Punctuator::dot: {
                 if (next == tokenVector2_.size() ||
@@ -173,15 +91,6 @@ size_t Computor_v1::SyntaxAnalyzer_v2() {
                     (token == Punctuator::dot && !std::isdigit(tokenVector2_[next]))) {
                     errorManager_->SetErrorIndex(i);
                     errorManager_->AddErrorMessage(kInvalidEntry);
-                }
-                if (token == Punctuator::equally) {
-                    if (!is_equally) {
-                        is_equally = true;
-                        pos_equally = i;
-                    } else {
-                        errorManager_->SetErrorIndex(i);
-                        errorManager_->AddErrorMessage(kManyEquals);
-                    }
                 }
                 break;
             }
@@ -194,36 +103,92 @@ size_t Computor_v1::SyntaxAnalyzer_v2() {
                     errorManager_->AddErrorMessage(kInvalidEntry);
                 }
                 break;
+            case Punctuator::equally:
+                if (token == Punctuator::equally) {
+                    if (!is_equally) {
+                        is_equally = true;
+                    } else {
+                        errorManager_->SetErrorIndex(i);
+                        errorManager_->AddErrorMessage(kManyEquals);
+                    }
+                }
+                break;
             default:
                 break;
         }
     }
-    return pos_equally;
+
+    if (errorManager_->isError()) {
+#if defined(UNIT_TESTS)
+        throw line_;
+#endif
+        return false;
+    }
+    return true;
 }
 
-void Computor_v1::MoveTokenToLeftFromEqually(size_t position) {
-    size_t next_position = position + 1;
-    if (tokenVector2_[next_position] == '0') {
-        return;
-    }
-
-    if (std::isdigit(tokenVector2_[next_position]) || IsKeyWord(tokenVector2_[next_position])) {
-        tokenVector2_[position] = Punctuator::minus;
-    } else if (tokenVector2_[next_position] == Punctuator::minus) {
-        tokenVector2_[position] = Punctuator::plus;
-    } else {
-        tokenVector2_[position] = Punctuator::minus;
-    }
-
-    for (size_t i = next_position + 1; i < tokenVector2_.size(); ++i) {
-        char& token = tokenVector2_[i];
-
-        if (token == Punctuator::minus) {
-            token = Punctuator::plus;
-        } else if (token == Punctuator::plus) {
-            token = Punctuator::minus;
+void Computor_v1::ChangeMinusToPlus(std::string &str) {
+    for (auto& elem : str) {
+        if (elem == Punctuator::minus) {
+            elem = Punctuator::plus;
+        } else if (elem == Punctuator::plus) {
+            elem = Punctuator::minus;
         }
     }
+    if (str[0] != Punctuator::minus && str[0] != Punctuator::plus) {
+        str.insert(str.begin(), 1, Punctuator::minus);
+    }
+}
+
+void Computor_v1::MoveTokenToLeftFromEqually() {
+    if (tokenVector2_[tokenVector2_.size() - 2] == Punctuator::equally &&
+        tokenVector2_[tokenVector2_.size() - 1] == '0') {
+        return;
+    } else if (tokenVector2_[1] == Punctuator::equally &&
+               tokenVector2_[0] == '0') {
+        for (size_t i = 0,
+             start = 0,
+             end = tokenVector2_.size() - 1;
+             i < 2;
+             ++i) {
+            for (size_t j = start; j < end; ++j) {
+                std::swap(tokenVector2_[j], tokenVector2_[j + 1]);
+            }
+            --end;
+        }
+    } else {
+        std::fill(tokenVector2_.begin(), tokenVector2_.end(), '0');
+        std::vector<std::string> split_line(tools::ft_split(line_, "="));
+        if (split_line[0].size() >= split_line[1].size()) {
+            ChangeMinusToPlus(split_line[1]);
+            int count = 0;
+            for (size_t i = 0; count < 2; ++count) {
+                for (size_t j = 0; j  < split_line[count].size(); ++i, ++j) {
+                    tokenVector2_[i] = split_line[count][j];
+                }
+            }
+        } else {
+            ChangeMinusToPlus(split_line[0]);
+            int count = 1;
+            for (size_t i = 0; count > -1; --count) {
+                for (size_t j = 0; j  < split_line[count].size(); ++i, ++j) {
+                    tokenVector2_[i] = split_line[count][j];
+                }
+            }
+        }
+        tokenVector2_.push_back('=');
+        tokenVector2_.push_back('0');
+    }
+
+#if defined(UNIT_TESTS)
+    std::string throw_str;
+    throw_str.reserve(line_.size());
+    for(size_t i = 0; i < tokenVector2_.size(); ++i) {
+        throw_str += tokenVector2_[i];
+    }
+    throw throw_str;
+#endif
+
 }
 
 void Computor_v1::ShuntingAlgorithm() {
@@ -299,29 +264,33 @@ void Computor_v1::CreateElements() {
     }
 }
 
+void Computor_v1::PrintError() {
+    // FIXME
+    CheckError();
+}
 
-void Computor_v1::parse() {
+void Computor_v1::PrintSolution() {
+
+}
+
+bool Computor_v1::parse() {
     if (line_.size() == 0) {
 #if defined(UNIT_TESTS)
         throw line_;
 #endif
-        errorManager_->PrintError(kEmptyLine);
-        throw EXIT_FAILURE;
+        errorManager_->SetErrorIndex(0);
+        errorManager_->AddErrorMessage(kEmptyLine);
+        return false;
     }
-
-//    LexicalAnalyzer();
-//    SyntaxAnalyzer();
-    LexicalAnalyzer_v2();
-    size_t pos_equally = SyntaxAnalyzer_v2();
-    CheckError();
-    MoveTokenToLeftFromEqually(pos_equally);
-    for (auto& elem: tokenVector2_) {
-        std::cout << elem;
+    SyntaxAnalyzer();
+    if (!LexicalAnalyzer() || !SyntaxAnalyzer()) {
+        return false;
     }
-    std::cout << "\n";
-    line_.clear();
+    MoveTokenToLeftFromEqually();
+//    line_.clear();
 
 //    CreateElements();
+    return true;
 }
 
 Computor_v1::Element::Element() :   num_(0),

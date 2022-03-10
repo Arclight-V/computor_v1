@@ -11,10 +11,11 @@ int main(int argc, char* argv[]) {
 
     Computor_v1 Computor_v1(argv[1]);
 
-    try {
-        Computor_v1.parse();
-    } catch (int return_value) {
-        exit(return_value);
+    bool is_ok =  Computor_v1.parse();
+    if (is_ok) {
+        Computor_v1.PrintSolution();
+    } else {
+        Computor_v1.PrintError();
     }
 
     return EXIT_SUCCESS;
