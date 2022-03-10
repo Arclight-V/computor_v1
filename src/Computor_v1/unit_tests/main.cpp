@@ -87,7 +87,7 @@ void checkInvalidValues() {
 
 int main() {
     checkInvalidValues();
-//    checkMoveTokenToLeftFromEqually();
+    checkMoveTokenToLeftFromEqually();
 
     return 0;
 }

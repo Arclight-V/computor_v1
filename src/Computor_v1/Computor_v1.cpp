@@ -9,15 +9,14 @@
 namespace {
     constexpr char kInvalidCharacter[] = "invalid character";
     constexpr char kManyEquals[] = "the expression must not contain more than one equal to";
-//    constexpr char kNotEquals[] = "the expression does not contain \"=\"";
+    constexpr char kNotEquals[] = "the expression does not contain \"=\"";
     constexpr char kInvalidEntry[] = "invalid entry";
     constexpr char kEmptyLine[] = "empty line";
-    constexpr char kOutOfRange[] = "the converted value would fall out of the range of the result type";
+//    constexpr char kOutOfRange[] = "the converted value would fall out of the range of the result type";
 }
 
 Computor_v1::Computor_v1(const char* line) :  line_(line)
                                              {
-    tokens_.reserve(line_.size());
     reverse_polish_notation_.reserve(line_.size());
     tokenVector2_.reserve(line_.size());
     errorManager_ = std::make_unique<ErrorManager>(line_.size() == 0 ? 1 : line_.size());
@@ -29,7 +28,6 @@ void Computor_v1::CheckError() {
         throw line_;
 #endif
         errorManager_->PrintErrors(line_);
-        throw EXIT_FAILURE;
     }
 }
 
@@ -72,7 +70,7 @@ bool Computor_v1::LexicalAnalyzer() {
     return true;
 }
 
-bool Computor_v1::SyntaxAnalyzer() {
+bool Computor_v1::SyntaxAnalyzer(bool& is_equation) {
     bool is_equally = false;
     for (size_t i = 0; i < tokenVector2_.size(); ++i) {
         const size_t next = i + 1;
@@ -96,7 +94,7 @@ bool Computor_v1::SyntaxAnalyzer() {
             }
             case KeyWord::X_:
             case KeyWord::x_:
-                if (next < tokens_.size() &&
+                if (next < tokenVector2_.size() &&
                     (tokenVector2_[next] == Punctuator::dot ||
                      std::isdigit(tokenVector2_[next])) ) {
                     errorManager_->SetErrorIndex(tokenVector2_[next]);
@@ -106,7 +104,7 @@ bool Computor_v1::SyntaxAnalyzer() {
             case Punctuator::equally:
                 if (token == Punctuator::equally) {
                     if (!is_equally) {
-                        is_equally = true;
+                        is_equally = is_equation = true;
                     } else {
                         errorManager_->SetErrorIndex(i);
                         errorManager_->AddErrorMessage(kManyEquals);
@@ -114,8 +112,19 @@ bool Computor_v1::SyntaxAnalyzer() {
                 }
                 break;
             default:
+                if (next < tokenVector2_.size() &&
+                    (tokenVector2_[next] == KeyWord::X_ ||
+                    tokenVector2_[next] == KeyWord::x_)) {
+                    errorManager_->SetErrorIndex(i);
+                    errorManager_->AddErrorMessage(kInvalidEntry);
+                }
                 break;
         }
+    }
+
+    if (!is_equally) {
+        errorManager_->SetErrorIndex(line_.size() - 1);
+        errorManager_->AddErrorMessage(kNotEquals);
     }
 
     if (errorManager_->isError()) {
@@ -157,6 +166,8 @@ void Computor_v1::MoveTokenToLeftFromEqually() {
             --end;
         }
     } else {
+        // XXX
+        // implement without memory allocation, by dividing the index = by the number of sims.
         std::fill(tokenVector2_.begin(), tokenVector2_.end(), '0');
         std::vector<std::string> split_line(tools::ft_split(line_, "="));
         if (split_line[0].size() >= split_line[1].size()) {
@@ -164,6 +175,9 @@ void Computor_v1::MoveTokenToLeftFromEqually() {
             int count = 0;
             for (size_t i = 0; count < 2; ++count) {
                 for (size_t j = 0; j  < split_line[count].size(); ++i, ++j) {
+                    if (split_line[count][j] == Punctuator::gap) {
+                        ++j;
+                    }
                     tokenVector2_[i] = split_line[count][j];
                 }
             }
@@ -172,6 +186,9 @@ void Computor_v1::MoveTokenToLeftFromEqually() {
             int count = 1;
             for (size_t i = 0; count > -1; --count) {
                 for (size_t j = 0; j  < split_line[count].size(); ++i, ++j) {
+                    if (split_line[count][j] == Punctuator::gap) {
+                        ++j;
+                    }
                     tokenVector2_[i] = split_line[count][j];
                 }
             }
@@ -198,70 +215,70 @@ void Computor_v1::ShuntingAlgorithm() {
 }
 
 void Computor_v1::CreateElements() {
-    std::string buf_elem;
-    std::string buf_pow;
-    buf_elem.reserve(tokens_.size());
-    buf_pow.reserve(tokens_.size());
-    double num = 0;
-    int pow = 0;
-    bool is_full_form = false;
-    std::unique_ptr<Element> elem_ptr = CreateUniqElement();
-
-    for (size_t i = 0; i < tokens_.size(); ++i) {
-        char token = tokens_[i]->getToken();
-
-        switch (token) {
-            case Punctuator::plus:
-            case Punctuator::minus:
-                elem_ptr = CreateUniqElement();
-                if (!buf_elem.empty()) {
-                    try {
-                        num = std::stod(buf_elem);
-                    } catch (std::out_of_range) {
-                        errorManager_->SetErrorIndex(tokens_[i]->getPosition());
-                        errorManager_->AddErrorMessage(kOutOfRange);
-                        errorManager_->PrintErrors(line_);
-                        throw EXIT_FAILURE;
-                    }
-                }
-                elem_ptr->setNum(num);
-                elem_ptr->setPow(pow);
-                elem_ptr->setIsFulForm(is_full_form);
-                elem_ptr->setSign(static_cast<Punctuator>(token));
-                coef_.push_back(std::move(elem_ptr));
-                break;
-            case Punctuator::multiply: {
-                // after '*' can be 'digit' or 'X' or 'x'
-                 char next_token = tokens_[i + 1]->getToken();
-                if (std::isdigit(next_token)) {
-                    try {
-//                        elem_ptr->  std::stod(buf);
-                    } catch (std::out_of_range) {
-                        errorManager_->SetErrorIndex(tokens_[i]->getPosition());
-                        errorManager_->AddErrorMessage(kOutOfRange);
-                        errorManager_->PrintErrors(line_);
-                        throw EXIT_FAILURE;
-                    }
-                    coef_.push_back(std::move(elem_ptr));
-                    buf_elem.clear();
-                }
-                break;
-            }
-            case Punctuator::equally:
-            case Punctuator::pow:
-                buf_elem.push_back(tokens_[i + 1]->getToken());
-            case Punctuator::dot:
-                buf_elem.push_back(token);
-                break;
-            case KeyWord::X_:
-            case KeyWord::x_:
-                is_full_form = true;
-                break;
-            default:
-                buf_elem.push_back(token);
-                break;
-        }
-    }
+//    std::string buf_elem;
+//    std::string buf_pow;
+//    buf_elem.reserve(tokens_.size());
+//    buf_pow.reserve(tokens_.size());
+//    double num = 0;
+//    int pow = 0;
+//    bool is_full_form = false;
+//    std::unique_ptr<Element> elem_ptr = CreateUniqElement();
+//
+//    for (size_t i = 0; i < tokens_.size(); ++i) {
+//        char token = tokens_[i]->getToken();
+//
+//        switch (token) {
+//            case Punctuator::plus:
+//            case Punctuator::minus:
+//                elem_ptr = CreateUniqElement();
+//                if (!buf_elem.empty()) {
+//                    try {
+//                        num = std::stod(buf_elem);
+//                    } catch (std::out_of_range) {
+//                        errorManager_->SetErrorIndex(tokens_[i]->getPosition());
+//                        errorManager_->AddErrorMessage(kOutOfRange);
+//                        errorManager_->PrintErrors(line_);
+//                        throw EXIT_FAILURE;
+//                    }
+//                }
+//                elem_ptr->setNum(num);
+//                elem_ptr->setPow(pow);
+//                elem_ptr->setIsFulForm(is_full_form);
+//                elem_ptr->setSign(static_cast<Punctuator>(token));
+//                coef_.push_back(std::move(elem_ptr));
+//                break;
+//            case Punctuator::multiply: {
+//                // after '*' can be 'digit' or 'X' or 'x'
+//                 char next_token = tokens_[i + 1]->getToken();
+//                if (std::isdigit(next_token)) {
+//                    try {
+////                        elem_ptr->  std::stod(buf);
+//                    } catch (std::out_of_range) {
+//                        errorManager_->SetErrorIndex(tokens_[i]->getPosition());
+//                        errorManager_->AddErrorMessage(kOutOfRange);
+//                        errorManager_->PrintErrors(line_);
+//                        throw EXIT_FAILURE;
+//                    }
+//                    coef_.push_back(std::move(elem_ptr));
+//                    buf_elem.clear();
+//                }
+//                break;
+//            }
+//            case Punctuator::equally:
+//            case Punctuator::pow:
+//                buf_elem.push_back(tokens_[i + 1]->getToken());
+//            case Punctuator::dot:
+//                buf_elem.push_back(token);
+//                break;
+//            case KeyWord::X_:
+//            case KeyWord::x_:
+//                is_full_form = true;
+//                break;
+//            default:
+//                buf_elem.push_back(token);
+//                break;
+//        }
+//    }
 }
 
 void Computor_v1::PrintError() {
@@ -282,50 +299,14 @@ bool Computor_v1::parse() {
         errorManager_->AddErrorMessage(kEmptyLine);
         return false;
     }
-    SyntaxAnalyzer();
-    if (!LexicalAnalyzer() || !SyntaxAnalyzer()) {
+    bool is_equation = false;
+    if (!LexicalAnalyzer() || !SyntaxAnalyzer(is_equation)) {
         return false;
     }
+
     MoveTokenToLeftFromEqually();
 //    line_.clear();
 
 //    CreateElements();
     return true;
 }
-
-Computor_v1::Element::Element() :   num_(0),
-                                    pow_(0),
-                                    sign_(none),
-                                    is_ful_form_(false) {}
-
-double Computor_v1::Element::getNum() const {
-    return num_;
-}
-
-void Computor_v1::Element::setNum(double num) {
-    num_ = num;
-}
-
-int Computor_v1::Element::getPow() const {
-    return pow_;
-}
-
-void Computor_v1::Element::setPow(int pow) {
-    pow_ = pow;
-}
-
-Punctuator Computor_v1::Element::getSign() const {
-    return sign_;
-}
-
-void Computor_v1::Element::setSign(Punctuator sign) {
-    sign_ = sign;
-}
-
-bool Computor_v1::Element::isFulForm() const {
-    return is_ful_form_;
-}
-
-void Computor_v1::Element::setIsFulForm(bool isFulForm) {
-    is_ful_form_ = isFulForm;
-};

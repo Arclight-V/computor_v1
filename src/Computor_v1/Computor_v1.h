@@ -36,79 +36,10 @@ namespace {
 class Computor_v1 {
 private:
 
-    class Element {
-    private:
-        double num_;
-        int pow_;
-        Punctuator sign_;
-        bool is_ful_form_;
-    public:
-        virtual ~Element() = default;
-
-        Element();
-        Element(const Element& rhs) = delete;
-        Element& operator=(const Element& rhs) = delete;
-
-        double getNum() const;
-
-        void setNum(double num);
-
-        int getPow() const;
-
-        void setPow(int pow);
-
-        Punctuator getSign() const;
-
-        void setSign(Punctuator sign);
-
-        bool isFulForm() const;
-
-        void setIsFulForm(bool isFulForm);
-
-    };
-
-    /*
-     * The class is needed to store data about the token and its position in the source line
-     */
-    class Token {
-    private:
-        char token_;
-        size_t position_;
-    public:
-
-        Token() = delete;
-        Token(char token, size_t position) : token_(token),
-                                             position_(position) {};
-        Token(const Token& rhs) = delete;
-        Token& operator=(const Token& rhs) = delete;
-
-        virtual ~Token() = default;
-
-        char getToken() const {
-            return token_;
-        };
-
-        void setToken(char token) {
-            token_ = token;
-        };
-
-        size_t getPosition() const {
-            return position_;
-        };
-
-        void setPosition(size_t position) {
-            position_ = position;
-        };
-    };
-
-    using coefficients = std::vector<std::unique_ptr<Element>>;
-    using token_vector = std::vector<std::unique_ptr<Token>>;
     using error_handler = std::unique_ptr<ErrorManager>;
     using token = char;
     using token_vector2 = std::vector<token>;
 
-    coefficients coef_;
-    token_vector tokens_;
     std::string line_;
     std::string reverse_polish_notation_;
     error_handler errorManager_;
@@ -117,7 +48,7 @@ private:
     bool IsKeyWord(char ch);
     bool IsPunctuator(char ch);
     bool LexicalAnalyzer();
-    bool SyntaxAnalyzer();
+    bool SyntaxAnalyzer(bool& is_equation);
     void MoveTokenToLeftFromEqually();
     void ChangeMinusToPlus(std::string& str);
     void CreateElements();
@@ -125,13 +56,12 @@ private:
     void ShuntingAlgorithm();
     void CheckError();
 
-    std::unique_ptr<Element> CreateUniqElement() { return std::make_unique<Element>();};
-
 public:
     Computor_v1() = delete;
     Computor_v1(const char* line);
     Computor_v1(const Computor_v1& rhs) = delete;
     Computor_v1& operator=(const Computor_v1& rhs) = delete;
+    virtual ~Computor_v1() {};
 
     bool parse();
     void PrintSolution();
