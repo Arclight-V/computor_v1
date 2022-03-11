@@ -70,7 +70,7 @@ bool Computor_v1::LexicalAnalyzer() {
     return true;
 }
 
-bool Computor_v1::SyntaxAnalyzer(bool& is_equation) {
+bool Computor_v1::SyntaxAnalyzer(size_t& equal_position) {
     bool is_equally = false;
     for (size_t i = 0; i < tokenVector2_.size(); ++i) {
         const size_t next = i + 1;
@@ -104,7 +104,8 @@ bool Computor_v1::SyntaxAnalyzer(bool& is_equation) {
             case Punctuator::equally:
                 if (token == Punctuator::equally) {
                     if (!is_equally) {
-                        is_equally = is_equation = true;
+                        is_equally = true;
+                        equal_position = i;
                     } else {
                         errorManager_->SetErrorIndex(i);
                         errorManager_->AddErrorMessage(kManyEquals);
@@ -136,20 +137,21 @@ bool Computor_v1::SyntaxAnalyzer(bool& is_equation) {
     return true;
 }
 
-void Computor_v1::ChangeMinusToPlus(std::string &str) {
-    for (auto& elem : str) {
-        if (elem == Punctuator::minus) {
-            elem = Punctuator::plus;
-        } else if (elem == Punctuator::plus) {
-            elem = Punctuator::minus;
+void Computor_v1::ChangeMinusToPlus(size_t pos) {
+    for (; pos < tokenVector2_.size() - 1; ++pos) {
+        if (tokenVector2_[pos] == Punctuator::minus) {
+            tokenVector2_[pos] = Punctuator::plus;
+        } else if (tokenVector2_[pos] == Punctuator::plus) {
+            tokenVector2_[pos] = Punctuator::minus;
         }
-    }
-    if (str[0] != Punctuator::minus && str[0] != Punctuator::plus) {
-        str.insert(str.begin(), 1, Punctuator::minus);
     }
 }
 
-void Computor_v1::MoveTokenToLeftFromEqually() {
+bool Computor_v1::IsNoMinusAndPlus(char ch) {
+    return ch != Punctuator::minus && ch != Punctuator::plus;
+}
+
+void Computor_v1::MoveTokenToLeftFromEqually(size_t equal_position) {
     if (tokenVector2_[tokenVector2_.size() - 2] == Punctuator::equally &&
         tokenVector2_[tokenVector2_.size() - 1] == '0') {
         return;
@@ -168,31 +170,20 @@ void Computor_v1::MoveTokenToLeftFromEqually() {
     } else {
         // XXX
         // implement without memory allocation, by dividing the index = by the number of sims.
-        std::fill(tokenVector2_.begin(), tokenVector2_.end(), '0');
-        std::vector<std::string> split_line(tools::ft_split(line_, "="));
-        if (split_line[0].size() >= split_line[1].size()) {
-            ChangeMinusToPlus(split_line[1]);
-            int count = 0;
-            for (size_t i = 0; count < 2; ++count) {
-                for (size_t j = 0; j  < split_line[count].size(); ++i, ++j) {
-                    if (split_line[count][j] == Punctuator::gap) {
-                        ++j;
-                    }
-                    tokenVector2_[i] = split_line[count][j];
-                }
+        if ((static_cast<double>(equal_position) / tokenVector2_.size()) >  (2.0 / tokenVector2_.size())) {
+            if (IsNoMinusAndPlus(tokenVector2_[equal_position + 1])) {
+                tokenVector2_[equal_position] = Punctuator::minus;
+            } else {
+                tokenVector2_.erase(tokenVector2_.begin() + equal_position);
             }
+            ChangeMinusToPlus(equal_position + 1);
         } else {
-            ChangeMinusToPlus(split_line[0]);
-            int count = 1;
-            for (size_t i = 0; count > -1; --count) {
-                for (size_t j = 0; j  < split_line[count].size(); ++i, ++j) {
-                    if (split_line[count][j] == Punctuator::gap) {
-                        ++j;
-                    }
-                    tokenVector2_[i] = split_line[count][j];
-                }
+            tokenVector2_[equal_position] = Punctuator::plus;
+            if (IsNoMinusAndPlus(tokenVector2_[0])) {
+                tokenVector2_.insert(tokenVector2_.begin(), Punctuator::minus)
             }
         }
+
         tokenVector2_.push_back('=');
         tokenVector2_.push_back('0');
     }
@@ -299,12 +290,18 @@ bool Computor_v1::parse() {
         errorManager_->AddErrorMessage(kEmptyLine);
         return false;
     }
-    bool is_equation = false;
-    if (!LexicalAnalyzer() || !SyntaxAnalyzer(is_equation)) {
+    size_t equal_position = 0;
+    if (!LexicalAnalyzer() || !SyntaxAnalyzer(equal_position)) {
         return false;
     }
 
-    MoveTokenToLeftFromEqually();
+    if (equal_position != 0) {
+        MoveTokenToLeftFromEqually(equal_position);
+    } else {
+        //FIXME
+        // implement the expression solution
+    }
+
 //    line_.clear();
 
 //    CreateElements();

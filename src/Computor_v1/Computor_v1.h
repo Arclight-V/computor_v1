@@ -48,9 +48,10 @@ private:
     bool IsKeyWord(char ch);
     bool IsPunctuator(char ch);
     bool LexicalAnalyzer();
-    bool SyntaxAnalyzer(bool& is_equation);
-    void MoveTokenToLeftFromEqually();
-    void ChangeMinusToPlus(std::string& str);
+    bool SyntaxAnalyzer(size_t& equal_position);
+    void MoveTokenToLeftFromEqually(size_t equal_position);
+    void ChangeMinusToPlus(size_t pos);
+    bool IsNoMinusAndPlus(char ch);
     void CreateElements();
     // Shunting Yard Algorithm
     void ShuntingAlgorithm();

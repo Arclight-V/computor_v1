@@ -21,7 +21,10 @@ void checkMoveTokenToLeftFromEqually() {
             {"5 * X^0 + 4 * X^1 - 9.3 * X^2 = -1", "5*X^0+4*X^1-9.3*X^2+1=0"},
             {"1 * X^0 = 5 * X^0 + 4 * X^1 - 9.3 * X^2", "1*X^0-5*X^0-4*X^1+9.3*X^2=0"},
             {"X^0 = 5 * X^0 + 4 * X^1 - 9.3 * X^2", "5*X^0+4*X^1-9.3*X^2-X^0=0"},
-            {"0 = 5 * X^0 + 4 * X^1 - 9.3 * X^2", "5*X^0+4*X^1-9.3*X^2=0"}
+            {"0 = 5 * X^0 + 4 * X^1 - 9.3 * X^2", "5*X^0+4*X^1-9.3*X^2=0"},
+            {"5 * X^0 + 4*X^1 - 9.3 * X^2 = 0 * X^0", "5*X^0+4*X^1-9.3*X^2-0*X^0=0"},
+            {"5 * X^0 + 4*X^1 - 9.3 * X^2 = -0 * X^0", "5*X^0+4*X^1-9.3*X^2-0*X^0=0"},
+            {"5 * X^0 + 4*X^1 - 9.3 * X^2 = 0 + 1", "5*X^0+4*X^1-9.3*X^2-0-1=0"}
     };
 
     std::cout << "Move token to left from equally test" << "\n";
@@ -34,7 +37,7 @@ void checkMoveTokenToLeftFromEqually() {
             computorV1.parse();
         } catch (std::string str) {
             if (str != value) {
-                std::cout << RED << "FAILURE" << '\n';
+                std::cout << RED << "FAILURE"  << " " << key << '\n';
                 std::cout << value << "\n" << GREEN << str << '\n' << NORMAL;
             } else {
                 std::cout << GREEN << "OK" << '\n' << NORMAL;
@@ -47,6 +50,9 @@ void checkMoveTokenToLeftFromEqually() {
 void checkInvalidValues() {
     std::vector<std::string> vec_invalid_values = {"hello",
                                                    "",
+                                                   "11",
+                                                   "11 11",
+                                                   "=",
                                                    ".0",
                                                    "5 * X^0.0. + 4 * X^1 - 9.3 * X^2 = 1 * X^0",
                                                    "5 * 0X^0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0",
