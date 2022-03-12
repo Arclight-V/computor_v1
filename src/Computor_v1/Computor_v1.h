@@ -50,7 +50,7 @@ private:
     bool LexicalAnalyzer();
     bool SyntaxAnalyzer(size_t& equal_position);
     void MoveTokenToLeftFromEqually(size_t equal_position);
-    void ChangeMinusToPlus(size_t pos);
+    void ChangeMinusToPlus(size_t begin, size_t end);
     bool IsNoMinusAndPlus(char ch);
     void CreateElements();
     // Shunting Yard Algorithm

@@ -137,12 +137,12 @@ bool Computor_v1::SyntaxAnalyzer(size_t& equal_position) {
     return true;
 }
 
-void Computor_v1::ChangeMinusToPlus(size_t pos) {
-    for (; pos < tokenVector2_.size() - 1; ++pos) {
-        if (tokenVector2_[pos] == Punctuator::minus) {
-            tokenVector2_[pos] = Punctuator::plus;
-        } else if (tokenVector2_[pos] == Punctuator::plus) {
-            tokenVector2_[pos] = Punctuator::minus;
+void Computor_v1::ChangeMinusToPlus(size_t begin, size_t end) {
+    for (; begin < end; ++begin) {
+        if (tokenVector2_[begin] == Punctuator::minus) {
+            tokenVector2_[begin] = Punctuator::plus;
+        } else if (tokenVector2_[begin] == Punctuator::plus) {
+            tokenVector2_[begin] = Punctuator::minus;
         }
     }
 }
@@ -157,37 +157,27 @@ void Computor_v1::MoveTokenToLeftFromEqually(size_t equal_position) {
         return;
     } else if (tokenVector2_[1] == Punctuator::equally &&
                tokenVector2_[0] == '0') {
-        for (size_t i = 0,
-             start = 0,
-             end = tokenVector2_.size() - 1;
-             i < 2;
-             ++i) {
-            for (size_t j = start; j < end; ++j) {
-                std::swap(tokenVector2_[j], tokenVector2_[j + 1]);
-            }
-            --end;
-        }
+        tokenVector2_.erase(tokenVector2_.begin(), tokenVector2_.begin() + 2);
     } else {
-        // XXX
-        // implement without memory allocation, by dividing the index = by the number of sims.
-        if ((static_cast<double>(equal_position) / tokenVector2_.size()) >  (2.0 / tokenVector2_.size())) {
+        if (equal_position > tokenVector2_.size() / 2) {
             if (IsNoMinusAndPlus(tokenVector2_[equal_position + 1])) {
                 tokenVector2_[equal_position] = Punctuator::minus;
             } else {
                 tokenVector2_.erase(tokenVector2_.begin() + equal_position);
+                --equal_position;
             }
-            ChangeMinusToPlus(equal_position + 1);
+            ChangeMinusToPlus(equal_position + 1, tokenVector2_.size() - 1);
         } else {
-            tokenVector2_[equal_position] = Punctuator::plus;
             if (IsNoMinusAndPlus(tokenVector2_[0])) {
-                tokenVector2_.insert(tokenVector2_.begin(), Punctuator::minus)
+                tokenVector2_.insert(tokenVector2_.begin(), Punctuator::minus);
+                ++equal_position;
             }
+            ChangeMinusToPlus(2, equal_position - 1);
+            tokenVector2_[equal_position] = Punctuator::plus;
         }
-
-        tokenVector2_.push_back('=');
-        tokenVector2_.push_back('0');
     }
-
+    tokenVector2_.push_back('=');
+    tokenVector2_.push_back('0');
 #if defined(UNIT_TESTS)
     std::string throw_str;
     throw_str.reserve(line_.size());
