@@ -9,9 +9,9 @@
 namespace {
     constexpr char kInvalidCharacter[] = "invalid character";
     constexpr char kManyEquals[] = "the expression must not contain more than one equal to";
-    constexpr char kNotEquals[] = "the expression does not contain \"=\"";
     constexpr char kInvalidEntry[] = "invalid entry";
     constexpr char kEmptyLine[] = "empty line";
+    constexpr char kNotMathOperations[] = "does not contain mathematical operators";
 //    constexpr char kOutOfRange[] = "the converted value would fall out of the range of the result type";
 }
 
@@ -72,10 +72,13 @@ bool Computor_v1::LexicalAnalyzer() {
 
 bool Computor_v1::SyntaxAnalyzer(size_t& equal_position) {
     bool is_equally = false;
+    bool is_math_operations = false;
     for (size_t i = 0; i < tokenVector2_.size(); ++i) {
         const size_t next = i + 1;
         const char token = tokenVector2_[i];
         switch (token) {
+            // FIXME
+            // delete case Punctuator::gap if not checked
             case Punctuator::gap:
                 break;
             case Punctuator::plus:
@@ -90,6 +93,9 @@ bool Computor_v1::SyntaxAnalyzer(size_t& equal_position) {
                     errorManager_->SetErrorIndex(i);
                     errorManager_->AddErrorMessage(kInvalidEntry);
                 }
+                if (!is_math_operations) {
+                    is_math_operations = true;
+                }
                 break;
             }
             case KeyWord::X_:
@@ -102,14 +108,12 @@ bool Computor_v1::SyntaxAnalyzer(size_t& equal_position) {
                 }
                 break;
             case Punctuator::equally:
-                if (token == Punctuator::equally) {
-                    if (!is_equally) {
-                        is_equally = true;
-                        equal_position = i;
-                    } else {
-                        errorManager_->SetErrorIndex(i);
-                        errorManager_->AddErrorMessage(kManyEquals);
-                    }
+                if (!is_equally) {
+                    is_equally = true;
+                    equal_position = i;
+                } else {
+                    errorManager_->SetErrorIndex(i);
+                    errorManager_->AddErrorMessage(kManyEquals);
                 }
                 break;
             default:
@@ -123,9 +127,9 @@ bool Computor_v1::SyntaxAnalyzer(size_t& equal_position) {
         }
     }
 
-    if (!is_equally) {
-        errorManager_->SetErrorIndex(line_.size() - 1);
-        errorManager_->AddErrorMessage(kNotEquals);
+    if (!is_math_operations) {
+        errorManager_->SetErrorIndex(0);
+        errorManager_->AddErrorMessage(kNotMathOperations);
     }
 
     if (errorManager_->isError()) {
@@ -154,6 +158,14 @@ bool Computor_v1::IsNoMinusAndPlus(char ch) {
 void Computor_v1::MoveTokenToLeftFromEqually(size_t equal_position) {
     if (tokenVector2_[tokenVector2_.size() - 2] == Punctuator::equally &&
         tokenVector2_[tokenVector2_.size() - 1] == '0') {
+#if defined(UNIT_TESTS)
+        std::string throw_str;
+        throw_str.reserve(line_.size());
+        for(size_t i = 0; i < tokenVector2_.size(); ++i) {
+            throw_str += tokenVector2_[i];
+        }
+        throw throw_str;
+#endif
         return;
     } else if (tokenVector2_[1] == Punctuator::equally &&
                tokenVector2_[0] == '0') {

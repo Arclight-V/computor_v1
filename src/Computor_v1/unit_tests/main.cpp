@@ -17,7 +17,7 @@ void checkMoveTokenToLeftFromEqually() {
             {"5 * X^0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0", "5*X^0+4*X^1-9.3*X^2-1*X^0=0"},
             {"5 * X^0 + 4*X^1 - 9.3 * X^2= -1 * X^0", "5*X^0+4*X^1-9.3*X^2+1*X^0=0"},
             {"5 * X^0 + 4 * X^1 - 9.3 * X^2 = +1 * X^0", "5*X^0+4*X^1-9.3*X^2-1*X^0=0"},
-            {"5 *X^0 + 4 * X^1 - 9.3 * X^2 = 0", "5*X^0+4*X^1-9.3*X^2=0"},
+            {"5 * X^0 + 4 * X^1 - 9.3 * X^2 = 0", "5*X^0+4*X^1-9.3*X^2=0"},
             {"5 * X^0 + 4 * X^1 - 9.3 * X^2 = -1", "5*X^0+4*X^1-9.3*X^2+1=0"},
             {"1 * X^0 = 5 * X^0 + 4 * X^1 - 9.3 * X^2", "-1*X^0+5*X^0+4*X^1-9.3*X^2=0"},
             {"X^0 = 5 * X^0 + 4 * X^1 - 9.3 * X^2", "-X^0+5*X^0+4*X^1-9.3*X^2=0"},
@@ -31,9 +31,9 @@ void checkMoveTokenToLeftFromEqually() {
     std::cout << "Move token to left from equally test" << "\n";
     int i = 0;
     for (const auto& [key, value] : values) {
-//        std::cout << key.c_str() << "\n";
         Computor_v1 computorV1(key.c_str());
         std::cout << "Test " << ++i << " ";
+//        std::cout << "\n" << key.c_str() << "\n";
         try {
             computorV1.parse();
         } catch (std::string str) {
@@ -42,7 +42,7 @@ void checkMoveTokenToLeftFromEqually() {
                 std::cout << value << "\n" << GREEN << str << '\n' << NORMAL;
             } else {
                 std::cout << GREEN << "OK" << '\n' << NORMAL;
-                std::cout << value << "\n" << GREEN << str << '\n' << NORMAL;
+//                std::cout << value << "\n" << GREEN << str << '\n' << NORMAL;
             }
         }
     }
@@ -72,28 +72,24 @@ void checkInvalidValues() {
                                                    "5 * X^5^0^05 + 4 * X^1 - 9.3 * X^2 = 1 * X^0"
                                                     };
     std::vector<std::string> vec_values;
-    vec_values.reserve(vec_invalid_values.size());
 
     std::cout << "Invalid values test" << "\n";
     for (size_t i = 0; i < vec_invalid_values.size(); ++i) {
         Computor_v1 computorV1(vec_invalid_values[i].c_str());
+        std::cout << "Test " << i + 1 << " ";
         try {
             computorV1.parse();
         } catch (std::string str) {
-            vec_values[i] = str;
-        }
-        std::cout << "Test " << i << " ";
-        if (vec_invalid_values[i] != vec_values[i]) {
-            std::cout << RED << "FAILURE" << '\n';
-            std::cout << vec_invalid_values[i] << GREEN " " << vec_values[i] << '\n' << NORMAL;
-        } else {
             std::cout << GREEN << "OK" << '\n' << NORMAL;
+            continue;
         }
+        std::cout << RED << "FAILURE" << '\n';
+        std::cout << vec_invalid_values[i] << '\n' << NORMAL;
     }
 }
 
 int main() {
-//    checkInvalidValues();
+    checkInvalidValues();
     checkMoveTokenToLeftFromEqually();
 
     return 0;
