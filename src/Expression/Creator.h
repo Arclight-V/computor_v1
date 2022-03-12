@@ -1,5 +1,5 @@
 //
-// Created by Sergey Sudnichnikov on 21.02.2022.
+// Created by Anatashi on 21.02.2022.
 //
 
 #ifndef COMPUTOR_V1_CREATOR_H
