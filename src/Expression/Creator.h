@@ -8,10 +8,12 @@
 #include "Expression/NumberNode.h"
 #include "Expression/UnknownNode.h"
 #include "Expression/OperatorNode.h"
+#include "Expression/PolynomialExpressionTree.h"
 
 class Creator {
 public:
     using node = std::unique_ptr<Node>;
+    using expression_tree = std::unique_ptr<ExpressionTree>;
 
     Creator() = default;
     Creator(const Creator& rhs) = delete;
@@ -27,6 +29,8 @@ public:
     node createNumberNodeDouble(double value) { return std::make_unique<NumberNode<double>>(value); }
     node getUnknownNode() const { return std::make_unique<UnknownNode>(); }
     node createUnknowNode(char value) { return std::make_unique<UnknownNode>(value); }
+
+    expression_tree getPlynomialExpressionTree() const { return std::make_unique<PolynomialExpressionTree>(); }
 
 };
 

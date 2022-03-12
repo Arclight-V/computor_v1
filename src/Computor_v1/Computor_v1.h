@@ -11,6 +11,7 @@
 #include <algorithm>
 
 #include "ErrorManager/ErrorManager.h"
+#include "Expression/PolynomialExpressionTree.h"
 
 namespace {
     enum Punctuator {
@@ -37,6 +38,7 @@ class Computor_v1 {
 private:
 
     using error_handler = std::unique_ptr<ErrorManager>;
+    using expression_tree = std::unique_ptr<ExpressionTree>;
     using token = char;
     using token_vector2 = std::vector<token>;
 
@@ -44,6 +46,7 @@ private:
     std::string reverse_polish_notation_;
     error_handler errorManager_;
     token_vector2 tokenVector2_;
+    expression_tree expressionTree_;
 
     bool IsKeyWord(char ch);
     bool IsPunctuator(char ch);

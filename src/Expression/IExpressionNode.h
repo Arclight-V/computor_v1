@@ -7,8 +7,6 @@
 
 // interface to implement a decision tree node
 class IExpressionNode {
-protected:
-
 public:
     virtual ~IExpressionNode() = default;
 };
