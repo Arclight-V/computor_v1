@@ -299,6 +299,7 @@ bool Computor_v1::parse() {
 
     if (equal_position != 0) {
         MoveTokenToLeftFromEqually(equal_position);
+        expressionTree_ = creator_.getPlynomialExpressionTree();
     } else {
         //FIXME
         // implement the expression solution

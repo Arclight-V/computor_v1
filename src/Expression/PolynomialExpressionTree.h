@@ -15,8 +15,16 @@
 
 
 class PolynomialExpressionTree : public ExpressionTree {
+    using node = std::unique_ptr<Node>;
+private:
+    node polynomialZero_;
+    node polynomialFirst_;
+    node polynomialSecond;
+
 public:
     PolynomialExpressionTree() = default;
+    PolynomialExpressionTree(const PolynomialExpressionTree& rhs) = delete;
+    PolynomialExpressionTree operator=(const ExpressionTree& rhs) = delete;
     virtual ~PolynomialExpressionTree() = default;
 
     virtual void addNode(std::unique_ptr<Node> node) override {

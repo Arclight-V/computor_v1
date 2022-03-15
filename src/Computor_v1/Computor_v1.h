@@ -12,6 +12,7 @@
 
 #include "ErrorManager/ErrorManager.h"
 #include "Expression/PolynomialExpressionTree.h"
+#include "Expression/Creator.h"
 
 namespace {
     enum Punctuator {
@@ -46,7 +47,10 @@ private:
     std::string reverse_polish_notation_;
     error_handler errorManager_;
     token_vector2 tokenVector2_;
+    Creator creator_;
     expression_tree expressionTree_;
+
+
 
     bool IsKeyWord(char ch);
     bool IsPunctuator(char ch);
