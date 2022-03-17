@@ -59,9 +59,8 @@ private:
     void ChangeMinusToPlus(size_t begin, size_t end);
     bool IsNoMinusAndPlus(char ch);
     void MoveTokenToLeftFromEqually(size_t equal_position);
-    void CreateElements();
     // Shunting Yard Algorithm
-    void ShuntingAlgorithm();
+    void ConvertInfixNotationToRPN();
     void CheckError();
 
 public:

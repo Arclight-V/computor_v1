@@ -201,78 +201,14 @@ void Computor_v1::MoveTokenToLeftFromEqually(size_t equal_position) {
 
 }
 
-void Computor_v1::ShuntingAlgorithm() {
+void Computor_v1::ConvertInfixNotationToRPN() {
     for (auto& token: tokenVector2_) {
-        (void)token;
+        switch (token) {
+            case
+        }
     }
 }
 
-void Computor_v1::CreateElements() {
-//    std::string buf_elem;
-//    std::string buf_pow;
-//    buf_elem.reserve(tokens_.size());
-//    buf_pow.reserve(tokens_.size());
-//    double num = 0;
-//    int pow = 0;
-//    bool is_full_form = false;
-//    std::unique_ptr<Element> elem_ptr = CreateUniqElement();
-//
-//    for (size_t i = 0; i < tokens_.size(); ++i) {
-//        char token = tokens_[i]->getToken();
-//
-//        switch (token) {
-//            case Punctuator::plus:
-//            case Punctuator::minus:
-//                elem_ptr = CreateUniqElement();
-//                if (!buf_elem.empty()) {
-//                    try {
-//                        num = std::stod(buf_elem);
-//                    } catch (std::out_of_range) {
-//                        errorManager_->SetErrorIndex(tokens_[i]->getPosition());
-//                        errorManager_->AddErrorMessage(kOutOfRange);
-//                        errorManager_->PrintErrors(line_);
-//                        throw EXIT_FAILURE;
-//                    }
-//                }
-//                elem_ptr->setNum(num);
-//                elem_ptr->setPow(pow);
-//                elem_ptr->setIsFulForm(is_full_form);
-//                elem_ptr->setSign(static_cast<Punctuator>(token));
-//                coef_.push_back(std::move(elem_ptr));
-//                break;
-//            case Punctuator::multiply: {
-//                // after '*' can be 'digit' or 'X' or 'x'
-//                 char next_token = tokens_[i + 1]->getToken();
-//                if (std::isdigit(next_token)) {
-//                    try {
-////                        elem_ptr->  std::stod(buf);
-//                    } catch (std::out_of_range) {
-//                        errorManager_->SetErrorIndex(tokens_[i]->getPosition());
-//                        errorManager_->AddErrorMessage(kOutOfRange);
-//                        errorManager_->PrintErrors(line_);
-//                        throw EXIT_FAILURE;
-//                    }
-//                    coef_.push_back(std::move(elem_ptr));
-//                    buf_elem.clear();
-//                }
-//                break;
-//            }
-//            case Punctuator::equally:
-//            case Punctuator::pow:
-//                buf_elem.push_back(tokens_[i + 1]->getToken());
-//            case Punctuator::dot:
-//                buf_elem.push_back(token);
-//                break;
-//            case KeyWord::X_:
-//            case KeyWord::x_:
-//                is_full_form = true;
-//                break;
-//            default:
-//                buf_elem.push_back(token);
-//                break;
-//        }
-//    }
-}
 
 void Computor_v1::PrintError() {
     // FIXME
@@ -299,14 +235,12 @@ bool Computor_v1::parse() {
 
     if (equal_position != 0) {
         MoveTokenToLeftFromEqually(equal_position);
-        expressionTree_ = creator_.getPlynomialExpressionTree();
     } else {
-        //FIXME
-        // implement the expression solution
+        // Computor_v2
+        return false;
     }
 
 //    line_.clear();
 
-//    CreateElements();
     return true;
 }
