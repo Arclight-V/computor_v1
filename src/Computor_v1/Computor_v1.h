@@ -32,6 +32,7 @@ namespace {
         X_ = 'X',
         x_ = 'x',
     };
+
 } // namespace
 
 
@@ -41,12 +42,12 @@ private:
     using error_handler = std::unique_ptr<ErrorManager>;
     using expression_tree = std::unique_ptr<ExpressionTree>;
     using token = char;
-    using token_vector2 = std::vector<token>;
+    using token_vector = std::vector<token>;
 
     std::string line_;
     std::string reverse_polish_notation_;
     error_handler errorManager_;
-    token_vector2 tokenVector2_;
+    token_vector tokenVector_;
     Creator creator_;
     expression_tree expressionTree_;
 
@@ -54,6 +55,7 @@ private:
 
     bool IsKeyWord(char ch);
     bool IsPunctuator(char ch);
+    bool IsOperator(char ch);
     bool LexicalAnalyzer();
     bool SyntaxAnalyzer(size_t& equal_position);
     void ChangeMinusToPlus(size_t begin, size_t end);

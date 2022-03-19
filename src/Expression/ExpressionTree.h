@@ -11,7 +11,10 @@ class ExpressionTree {
 public:
     ExpressionTree() = default;
     ExpressionTree(const ExpressionTree& rhs) = delete;
+    ExpressionTree(ExpressionTree&& rhs) = delete;
     ExpressionTree& operator=(const ExpressionTree& rhs) = delete;
+    ExpressionTree& operator=(ExpressionTree&& rhs) = delete;
+
     virtual ~ExpressionTree() = default;
 
     virtual void addNode(std::unique_ptr<Node> node) = 0;
