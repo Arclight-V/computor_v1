@@ -33,6 +33,13 @@ namespace {
         x_ = 'x',
     };
 
+    enum Operators  {
+        ADDITION = '+',
+        SUBTRACTION = '-',
+        MULTIPLICATION = '*',
+        POWER = '^'
+    };
+
 } // namespace
 
 
@@ -51,7 +58,24 @@ private:
     Creator creator_;
     expression_tree expressionTree_;
 
+    class OperatorCv1 {
+    private:
+        enum class Associativity {
+            LEFT,
+            RIGHT
+        };
 
+        Operators op_;
+        Associativity associativity_;
+        int precedence_;
+
+    public:
+        OperatorCv1() = delete;
+        // TODO: add constructors (copy, move and e.g)
+        OperatorCv1(Operators op);
+
+
+    };
 
     bool IsKeyWord(char ch);
     bool IsPunctuator(char ch);
@@ -63,6 +87,7 @@ private:
     void MoveTokenToLeftFromEqually(size_t equal_position);
     // Shunting Yard Algorithm
     void ConvertInfixNotationToRPN();
+    bool ComparePrecedence();
     void CheckError();
 
 public:

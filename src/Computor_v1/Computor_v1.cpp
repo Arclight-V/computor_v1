@@ -199,6 +199,10 @@ void Computor_v1::MoveTokenToLeftFromEqually(size_t equal_position) {
 #endif
 
 }
+// TODO: add implementation
+bool Computor_v1::ComparePrecedence() {
+
+}
 
 void Computor_v1::ConvertInfixNotationToRPN() {
     token_vector RPNVector;
@@ -207,6 +211,7 @@ void Computor_v1::ConvertInfixNotationToRPN() {
 
     for (size_t i = 0; i < tokenVector_.size(); ++i) {
         if (IsOperator(tokenVector_[i])) {
+            // TODO: add checking to compare precedence
             while (!operatorStack.empty()) {
 
             }
@@ -256,4 +261,23 @@ bool Computor_v1::parse() {
 //    line_.clear();
 
     return true;
+}
+
+Computor_v1::OperatorCv1::OperatorCv1(Operators op) : op_(op) {
+    switch (op_) {
+        case ADDITION:
+        case SUBTRACTION:
+            associativity_ = Associativity::LEFT;
+            precedence_ = 0;
+            break;
+        case MULTIPLICATION:
+            associativity_ = Associativity::LEFT;
+            precedence_ = 5;
+            break;
+        case POWER:
+            associativity_ = Associativity::RIGHT;
+            precedence_ = 10;
+        default:
+            break;
+    }
 }
