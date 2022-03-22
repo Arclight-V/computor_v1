@@ -23,8 +23,15 @@ private:
 
 public:
     PolynomialExpressionTree() = default;
-    PolynomialExpressionTree(const PolynomialExpressionTree& rhs) = delete;
-    PolynomialExpressionTree operator=(const ExpressionTree& rhs) = delete;
+    PolynomialExpressionTree(const PolynomialExpressionTree& rhs) {
+        Node* first = rhs.polynomialZero_.get();
+        while(first) {
+
+        }
+    }
+    PolynomialExpressionTree(PolynomialExpressionTree&& rhs) = default;
+    PolynomialExpressionTree& operator=(const PolynomialExpressionTree& rhs) = delete;
+    PolynomialExpressionTree& operator=(PolynomialExpressionTree&& rhs) = default;
     virtual ~PolynomialExpressionTree() = default;
 
     virtual void addNode(std::unique_ptr<Node> node) override {

@@ -40,6 +40,11 @@ namespace {
         POWER = '^'
     };
 
+    enum class Associativity {
+        LEFT,
+        RIGHT
+    };
+
 } // namespace
 
 
@@ -47,12 +52,11 @@ class Computor_v1 {
 private:
 
     using error_handler = std::unique_ptr<ErrorManager>;
-    using expression_tree = std::unique_ptr<ExpressionTree>;
+    using expression_tree = std::unique_ptr<PolynomialExpressionTree>;
     using token = char;
     using token_vector = std::vector<token>;
 
     std::string line_;
-    std::string reverse_polish_notation_;
     error_handler errorManager_;
     token_vector tokenVector_;
     Creator creator_;
@@ -60,10 +64,6 @@ private:
 
     class OperatorCv1 {
     private:
-        enum class Associativity {
-            LEFT,
-            RIGHT
-        };
 
         Operators op_;
         Associativity associativity_;
@@ -71,9 +71,20 @@ private:
 
     public:
         OperatorCv1() = delete;
-        // TODO: add constructors (copy, move and e.g)
         OperatorCv1(Operators op);
+        OperatorCv1(const OperatorCv1& rhs) = delete;
+        OperatorCv1(OperatorCv1&& rhs) = default;
+        OperatorCv1& operator=(const OperatorCv1& rhs) = delete;
 
+        Associativity getAssociativity() const;
+
+        bool operator<(const OperatorCv1 &rhs) const;
+
+        bool operator>(const OperatorCv1 &rhs) const;
+
+        bool operator<=(const OperatorCv1 &rhs) const;
+
+        bool operator>=(const OperatorCv1 &rhs) const;
 
     };
 
@@ -87,7 +98,7 @@ private:
     void MoveTokenToLeftFromEqually(size_t equal_position);
     // Shunting Yard Algorithm
     void ConvertInfixNotationToRPN();
-    bool ComparePrecedence();
+    bool CreateTree();
     void CheckError();
 
 public:

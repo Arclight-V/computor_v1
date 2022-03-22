@@ -39,8 +39,8 @@ int main() {
     std::cout << *static_cast<NumberNode<int>*>(numberNodeInt.get()) + *static_cast<NumberNode<int>*>(numberNodeIntNext.get()) << "\n";
     std::cout << (*static_cast<NumberNode<int>*>(numberNodeInt.get()) != *static_cast<NumberNode<int>*>(numberNodeIntNext.get())) << "\n";
 
-//    std::unique_ptr<ExpressionTree> pExpressionTree(creator.getPlynomialExpressionTree());
-//    PolynomialExpressionTree polynomialExpressionTree;
+    std::unique_ptr<ExpressionTree> pExpressionTree(creator.getPlynomialExpressionTree());
+    PolynomialExpressionTree polynomialExpressionTree;
     return 0;
 
 }

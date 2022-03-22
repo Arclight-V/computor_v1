@@ -11,9 +11,9 @@ class ExpressionTree {
 public:
     ExpressionTree() = default;
     ExpressionTree(const ExpressionTree& rhs) = delete;
-    ExpressionTree(ExpressionTree&& rhs) = delete;
+    ExpressionTree(ExpressionTree&& rhs) = default;
     ExpressionTree& operator=(const ExpressionTree& rhs) = delete;
-    ExpressionTree& operator=(ExpressionTree&& rhs) = delete;
+    ExpressionTree& operator=(ExpressionTree&& rhs) = default;
 
     virtual ~ExpressionTree() = default;
 

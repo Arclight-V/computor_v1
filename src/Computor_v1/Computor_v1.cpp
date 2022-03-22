@@ -18,7 +18,6 @@ namespace {
 
 Computor_v1::Computor_v1(const char* line) :  line_(line)
                                              {
-    reverse_polish_notation_.reserve(line_.size());
     tokenVector_.reserve(line_.size());
     errorManager_ = std::make_unique<ErrorManager>(line_.size() == 0 ? 1 : line_.size());
 }
@@ -39,7 +38,7 @@ bool Computor_v1::IsPunctuator(char ch) {
 }
 
 bool Computor_v1::IsOperator(char ch) {
-    return ch == plus || ch == minus || ch == multiply || ch == pow;
+    return ch == ADDITION || ch == SUBTRACTION || ch == MULTIPLICATION || ch == POWER;
 }
 
 bool Computor_v1::IsKeyWord(char ch) {
@@ -115,6 +114,12 @@ bool Computor_v1::SyntaxAnalyzer(size_t& equal_position) {
                     errorManager_->AddErrorMessage(kManyEquals);
                 }
                 break;
+            case Punctuator::left_bracket:
+                // TODO: add an implementation after completing the main part
+                break;
+            case Punctuator::right_bracket:
+                // TODO: add an implementation after completing the main part
+                break;
             default:
                 if (next < tokenVector_.size() &&
                     (tokenVector_[next] == KeyWord::X_ ||
@@ -187,9 +192,10 @@ void Computor_v1::MoveTokenToLeftFromEqually(size_t equal_position) {
             tokenVector_[equal_position] = Punctuator::plus;
         }
     }
+
+#if defined(UNIT_TESTS)
     tokenVector_.push_back('=');
     tokenVector_.push_back('0');
-#if defined(UNIT_TESTS)
     std::string throw_str;
     throw_str.reserve(line_.size());
     for(size_t i = 0; i < tokenVector_.size(); ++i) {
@@ -199,32 +205,54 @@ void Computor_v1::MoveTokenToLeftFromEqually(size_t equal_position) {
 #endif
 
 }
-// TODO: add implementation
-bool Computor_v1::ComparePrecedence() {
-
-}
 
 void Computor_v1::ConvertInfixNotationToRPN() {
     token_vector RPNVector;
     RPNVector.reserve(tokenVector_.size());
-    std::stack<char> operatorStack;
+    std::stack<token> operatorStack;
 
     for (size_t i = 0; i < tokenVector_.size(); ++i) {
         if (IsOperator(tokenVector_[i])) {
-            // TODO: add checking to compare precedence
             while (!operatorStack.empty()) {
-
+                OperatorCv1 op1 = OperatorCv1(static_cast<Operators>(tokenVector_[i]));
+                OperatorCv1 op2 = OperatorCv1(static_cast<Operators>(tokenVector_[i]));
+                if ((op1.getAssociativity() == Associativity::LEFT && op1 <= op2) ||
+                (op1.getAssociativity() == Associativity::RIGHT && op1 < op2)) {
+                    RPNVector.push_back(operatorStack.top());
+                    operatorStack.pop();
+                    continue;
+                }
+                break;
             }
-        } else if (std::isdigit(tokenVector_[i])) {
-
-        } else if (tokenVector_[i] == left_bracket) {
-
-        } else if (tokenVector_[i] == right_bracket) {
-
+            operatorStack.push(tokenVector_[i]);
+        }
+        else if (tokenVector_[i] == left_bracket) {
+            // TODO: add an implementation after completing the main part
+        }
+        else if (tokenVector_[i] == right_bracket) {
+            // TODO: add an implementation after completing the main part
         } else {
             RPNVector.push_back(tokenVector_[i]);
         }
     }
+
+    tokenVector_ = RPNVector;
+// TODO: delete
+//    while(!operatorStack.empty()) {
+//        RPNVector.push_back(operatorStack.top());
+//        operatorStack.pop();
+//    }
+//
+//    for (auto& elem : RPNVector) {
+//        std::cout << elem;
+//    }
+//    std::cout << "\n";
+}
+
+bool Computor_v1::CreateTree() {
+
+
+    return true;
 }
 
 
@@ -253,12 +281,21 @@ bool Computor_v1::parse() {
 
     if (equal_position != 0) {
         MoveTokenToLeftFromEqually(equal_position);
+        //FIX:
+        expressionTree_ = std::move(creator_.getPlynomialExpressionTree());
     } else {
         // Computor_v2
         return false;
     }
+
+    line_.clear();
+
     ConvertInfixNotationToRPN();
-//    line_.clear();
+
+    if (CreateTree()) {
+        return false;
+    }
+
 
     return true;
 }
@@ -272,12 +309,32 @@ Computor_v1::OperatorCv1::OperatorCv1(Operators op) : op_(op) {
             break;
         case MULTIPLICATION:
             associativity_ = Associativity::LEFT;
-            precedence_ = 5;
+            precedence_ = 1;
             break;
         case POWER:
             associativity_ = Associativity::RIGHT;
-            precedence_ = 10;
+            precedence_ = 2;
         default:
             break;
     }
+}
+
+bool Computor_v1::OperatorCv1::operator<(const Computor_v1::OperatorCv1 &rhs) const {
+    return precedence_ < rhs.precedence_;
+}
+
+bool Computor_v1::OperatorCv1::operator>(const Computor_v1::OperatorCv1 &rhs) const {
+    return rhs < *this;
+}
+
+bool Computor_v1::OperatorCv1::operator<=(const Computor_v1::OperatorCv1 &rhs) const {
+    return !(rhs < *this);
+}
+
+bool Computor_v1::OperatorCv1::operator>=(const Computor_v1::OperatorCv1 &rhs) const {
+    return !(*this < rhs);
+}
+
+Associativity Computor_v1::OperatorCv1::getAssociativity() const {
+    return associativity_;
 }
