@@ -250,7 +250,31 @@ void Computor_v1::ConvertInfixNotationToRPN() {
 }
 
 bool Computor_v1::CreateTree() {
-
+    for (size_t i = 0; i < tokenVector_.size(); ++i) {
+        if (IsOperator(tokenVector_[i])) {
+            expressionTree_->addNode(creator_.createOperatorNode(tokenVector_[i]));
+        } else if (std::isdigit(tokenVector_[i])) {
+            size_t j = i + 1;
+            while (std::isdigit(tokenVector_[j]) || tokenVector_[j] == dot) {
+                ++j;
+            }
+            std::string str;
+            str.reserve(j - i);
+            for (; i < j; ++i) {
+                str.push_back(tokenVector_[i]);
+            }
+            try {
+                expressionTree_->addNode(
+                        creator_.createNumberNodeDouble(
+                                std::stod(str.c_str())));
+            } catch (std::out_of_range) {
+                // TODO: add error_handler
+                return false;
+            }
+        } else {
+            expressionTree_->addNode(creator_.createUnknowNode(tokenVector_[i]));
+        }
+    }
 
     return true;
 }
@@ -281,8 +305,7 @@ bool Computor_v1::parse() {
 
     if (equal_position != 0) {
         MoveTokenToLeftFromEqually(equal_position);
-        //FIX:
-        expressionTree_ = std::move(creator_.getPlynomialExpressionTree());
+        expressionTree_ = creator_.getPolynomialTree();
     } else {
         // Computor_v2
         return false;

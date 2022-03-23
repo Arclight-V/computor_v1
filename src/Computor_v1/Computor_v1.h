@@ -60,7 +60,7 @@ private:
     error_handler errorManager_;
     token_vector tokenVector_;
     Creator creator_;
-    expression_tree expressionTree_;
+    expression_tree expressionTree_ = nullptr;
 
     class OperatorCv1 {
     private:

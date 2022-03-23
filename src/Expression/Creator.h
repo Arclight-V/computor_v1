@@ -14,6 +14,7 @@ class Creator {
 public:
     using node = std::unique_ptr<Node>;
     using expression_tree = std::unique_ptr<ExpressionTree>;
+    using polynomial_tree = std::unique_ptr<PolynomialExpressionTree>;
 
     Creator() = default;
     Creator(const Creator& rhs) = delete;
@@ -31,6 +32,7 @@ public:
     node createUnknowNode(char value) { return std::make_unique<UnknownNode>(value); }
 
     expression_tree getPlynomialExpressionTree() const { return std::make_unique<PolynomialExpressionTree>(); }
+    polynomial_tree getPolynomialTree() const { return std::make_unique<PolynomialExpressionTree>(); }
 
 };
 
