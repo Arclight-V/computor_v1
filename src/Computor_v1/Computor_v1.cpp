@@ -170,6 +170,7 @@ void Computor_v1::MoveTokenToLeftFromEqually(size_t equal_position) {
         }
         throw throw_str;
 #endif
+        tokenVector_.erase(tokenVector_.end() - 2, tokenVector_.end() + 1 ) ;
         return;
     } else if (tokenVector_[1] == Punctuator::equally &&
                tokenVector_[0] == '0') {
@@ -194,8 +195,8 @@ void Computor_v1::MoveTokenToLeftFromEqually(size_t equal_position) {
     }
 
 #if defined(UNIT_TESTS)
-    tokenVector_.push_back('=');
-    tokenVector_.push_back('0');
+//    tokenVector_.push_back('=');
+//    tokenVector_.push_back('0');
     std::string throw_str;
     throw_str.reserve(line_.size());
     for(size_t i = 0; i < tokenVector_.size(); ++i) {
@@ -247,6 +248,14 @@ void Computor_v1::ConvertInfixNotationToRPN() {
 //        std::cout << elem;
 //    }
 //    std::cout << "\n";
+#if defined(UNIT_TESTS)
+    std::string throw_str;
+        throw_str.reserve(tokenVector_.size());
+        for(size_t i = 0; i < tokenVector_.size(); ++i) {
+            throw_str += tokenVector_[i];
+        }
+        throw throw_str;
+#endif
 }
 
 bool Computor_v1::CreateTree() {
