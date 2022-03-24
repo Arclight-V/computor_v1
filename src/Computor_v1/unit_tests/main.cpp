@@ -18,6 +18,7 @@ void checkMoveTokenToLeftFromEqually() {
             {"5 * X^0 + 4*X^1 - 9.3 * X^2= -1 * X^0", "5*X^0+4*X^1-9.3*X^2+1*X^0"},
             {"5 * X^0 + 4 * X^1 - 9.3 * X^2 = +1 * X^0", "5*X^0+4*X^1-9.3*X^2-1*X^0"},
             {"5 * X^0 + 4 * X^1 - 9.3 * X^2 = 0", "5*X^0+4*X^1-9.3*X^2"},
+            {"0 = 5 * X^0 + 4 * X^1 - 9.3 * X^2", "5*X^0+4*X^1-9.3*X^2"},
             {"5 * X^0 + 4 * X^1 - 9.3 * X^2 = -1", "5*X^0+4*X^1-9.3*X^2+1"},
             {"1 * X^0 = 5 * X^0 + 4 * X^1 - 9.3 * X^2", "-1*X^0+5*X^0+4*X^1-9.3*X^2"},
             {"X^0 = 5 * X^0 + 4 * X^1 - 9.3 * X^2", "-X^0+5*X^0+4*X^1-9.3*X^2"},
@@ -90,7 +91,7 @@ void checkInvalidValues() {
 
 void сheckReversePolishNotation() {
     std::unordered_map <std::string, std::string> values =  {
-            {"5 + 4 - 9.3  = 0", "54+9.3-0-"}
+            {"5 * X^0 + 4*X^1 - 9.3 * X^2  = 0", "5X0^*4X1^*+9.3X2^*-"}
 //            {"5 * X^0 + 4*X^1 - 9.3 * X^2= -1 * X^0", "5*X^0+4*X^1-9.3*X^2+1*X^0=0"},
 //            {"5 * X^0 + 4 * X^1 - 9.3 * X^2 = +1 * X^0", "5*X^0+4*X^1-9.3*X^2-1*X^0=0"},
 //            {"5 * X^0 + 4 * X^1 - 9.3 * X^2 = 0", "5*X^0+4*X^1-9.3*X^2=0"},
@@ -125,8 +126,8 @@ void сheckReversePolishNotation() {
 }
 
 int main() {
-    checkInvalidValues();
-    checkMoveTokenToLeftFromEqually();
+//    checkInvalidValues();
+//    checkMoveTokenToLeftFromEqually();
     сheckReversePolishNotation();
 
     return 0;

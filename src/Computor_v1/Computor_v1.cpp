@@ -162,15 +162,15 @@ bool Computor_v1::IsNoMinusAndPlus(char ch) {
 void Computor_v1::MoveTokenToLeftFromEqually(size_t equal_position) {
     if (tokenVector_[tokenVector_.size() - 2] == Punctuator::equally &&
         tokenVector_[tokenVector_.size() - 1] == '0') {
-#if defined(UNIT_TESTS)
-        std::string throw_str;
-        throw_str.reserve(line_.size());
-        for(size_t i = 0; i < tokenVector_.size(); ++i) {
-            throw_str += tokenVector_[i];
-        }
-        throw throw_str;
-#endif
-        tokenVector_.erase(tokenVector_.end() - 2, tokenVector_.end() + 1 ) ;
+        tokenVector_.erase(tokenVector_.end() - 2, tokenVector_.end());
+//#if defined(UNIT_TESTS)
+//        std::string throw_str;
+//        throw_str.reserve(line_.size());
+//        for(size_t i = 0; i < tokenVector_.size(); ++i) {
+//            throw_str += tokenVector_[i];
+//        }
+//        throw throw_str;
+//#endif
         return;
     } else if (tokenVector_[1] == Punctuator::equally &&
                tokenVector_[0] == '0') {
@@ -194,16 +194,14 @@ void Computor_v1::MoveTokenToLeftFromEqually(size_t equal_position) {
         }
     }
 
-#if defined(UNIT_TESTS)
-//    tokenVector_.push_back('=');
-//    tokenVector_.push_back('0');
-    std::string throw_str;
-    throw_str.reserve(line_.size());
-    for(size_t i = 0; i < tokenVector_.size(); ++i) {
-        throw_str += tokenVector_[i];
-    }
-    throw throw_str;
-#endif
+//#if defined(UNIT_TESTS)
+//    std::string throw_str;
+//    throw_str.reserve(line_.size());
+//    for(size_t i = 0; i < tokenVector_.size(); ++i) {
+//        throw_str += tokenVector_[i];
+//    }
+//    throw throw_str;
+//#endif
 
 }
 
@@ -237,17 +235,16 @@ void Computor_v1::ConvertInfixNotationToRPN() {
         }
     }
 
+    while(!operatorStack.empty()) {
+        RPNVector.push_back(operatorStack.top());
+        operatorStack.pop();
+    }
     tokenVector_ = RPNVector;
 // TODO: delete
-//    while(!operatorStack.empty()) {
-//        RPNVector.push_back(operatorStack.top());
-//        operatorStack.pop();
-//    }
-//
-//    for (auto& elem : RPNVector) {
-//        std::cout << elem;
-//    }
-//    std::cout << "\n";
+    for (auto& elem : tokenVector_) {
+        std::cout << elem;
+    }
+    std::cout << "\n";
 #if defined(UNIT_TESTS)
     std::string throw_str;
         throw_str.reserve(tokenVector_.size());
