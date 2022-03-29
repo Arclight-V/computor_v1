@@ -111,6 +111,10 @@ public:
     bool parse();
     void PrintSolution();
     void PrintError();
+
+#if defined(UNIT_TESTS)
+    expression_tree getExpressionTree() { return std::move(expressionTree_); };
+#endif
 };
 
 

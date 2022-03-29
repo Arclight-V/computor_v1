@@ -125,10 +125,78 @@ void сheckReversePolishNotation() {
     }
 }
 
+void inorder(std::unique_ptr<Node> node, std::string& str) {
+    if (node == nullptr) {
+        return;
+    } else {
+        inorder(node->getLeftNode(), str);
+        switch (node->getNodeType()) {
+            case expression::oper:
+                str.push_back(static_cast<OperatorNode*>(node.get())->getOperator());
+                break;
+            case expression::number:
+                str.push_back(static_cast<NumberNode<double>*>(node.get())->getValue());
+                break;
+            case expression::unknown:
+                str.push_back(static_cast<UnknownNode*>(node.get())->getValue());
+            default:
+                break;
+        }
+        inorder(node->getRightNode(), str);
+    }
+}
+
+std::string TreeToStr(std::unique_ptr<PolynomialExpressionTree> tree) {
+    std::unique_ptr<Node> s_ptr = tree->getTreeNode();
+    std::string str;
+
+    inorder(std::move(s_ptr), str);
+
+    return str;
+}
+
+void checkConstructTree() {
+    std::unordered_map <std::string, std::string> values =  {
+            {"5 * X^0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0", "5*X^0+4*X^1-9.3*X^2-1*X^0"},
+            {"5 * X^0 + 4*X^1 - 9.3 * X^2= -1 * X^0", "5*X^0+4*X^1-9.3*X^2+1*X^0"},
+            {"5 * X^0 + 4 * X^1 - 9.3 * X^2 = +1 * X^0", "5*X^0+4*X^1-9.3*X^2-1*X^0"},
+            {"5 * X^0 + 4 * X^1 - 9.3 * X^2 = 0", "5*X^0+4*X^1-9.3*X^2"},
+            {"0 = 5 * X^0 + 4 * X^1 - 9.3 * X^2", "5*X^0+4*X^1-9.3*X^2"},
+            {"5 * X^0 + 4 * X^1 - 9.3 * X^2 = -1", "5*X^0+4*X^1-9.3*X^2+1"},
+            {"1 * X^0 = 5 * X^0 + 4 * X^1 - 9.3 * X^2", "-1*X^0+5*X^0+4*X^1-9.3*X^2"},
+            {"X^0 = 5 * X^0 + 4 * X^1 - 9.3 * X^2", "-X^0+5*X^0+4*X^1-9.3*X^2"},
+            {"0 = 5 * X^0 + 4 * X^1 - 9.3 * X^2", "5*X^0+4*X^1-9.3*X^2"},
+            {"5 * X^0 + 4*X^1 - 9.3 * X^2 = 0 * X^0", "5*X^0+4*X^1-9.3*X^2-0*X^0"},
+            {"5 * X^0 + 4*X^1 - 9.3 * X^2 = -0 * X^0", "5*X^0+4*X^1-9.3*X^2+0*X^0"},
+            {"5 * X^0 + 4*X^1 - 9.3 * X^2 = 0 + 1", "5*X^0+4*X^1-9.3*X^2-0-1"},
+            {"-1 * X^0 = 5 * X^0 + 4 * X^1 - 9.3 * X^2", "-1*X^0+5*X^0+4*X^1-9.3*X^2"}
+    };
+
+    std::cout << "Checking tree traversal" << "\n";
+    int i = 0;
+    for (const auto& [key, value] : values) {
+        Computor_v1 computorV1(key.c_str());
+        std::cout << "Test " << ++i << " ";
+//        std::cout << "\n" << key.c_str() << "\n";
+        computorV1.parse();
+        std::unique_ptr<PolynomialExpressionTree> tree = computorV1.getExpressionTree();
+        std::string str = TreeToStr(std::move(tree));
+        if (str != value) {
+            std::cout << RED << "FAILURE"  << " " << key << '\n';
+            std::cout << value << "\n" << GREEN << str << '\n' << NORMAL;
+        } else {
+            std::cout << GREEN << "OK" << '\n' << NORMAL;
+//            std::cout << value << "\n" << GREEN << str << '\n' << NORMAL;
+        }
+    }
+
+}
+
 int main() {
 //    checkInvalidValues();
 //    checkMoveTokenToLeftFromEqually();
     сheckReversePolishNotation();
+//    checkConstructTree();
 
     return 0;
 }

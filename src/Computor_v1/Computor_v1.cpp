@@ -269,6 +269,7 @@ bool Computor_v1::CreateTree() {
             for (; i < j; ++i) {
                 str.push_back(tokenVector_[i]);
             }
+            --i;
             try {
                 expressionTree_->addNode(
                         creator_.createNumberNodeDouble(
