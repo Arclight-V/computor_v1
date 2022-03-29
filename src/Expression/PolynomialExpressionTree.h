@@ -21,6 +21,9 @@ private:
     node polynomialFirst_;
     node polynomialSecond;
 
+    StackNode stackNode_;
+    node tree_;
+
 public:
     PolynomialExpressionTree() = default;
     PolynomialExpressionTree(const PolynomialExpressionTree& rhs) = delete;
@@ -32,11 +35,11 @@ public:
     virtual void addNode(std::unique_ptr<Node> node) override {
         // TODO: add implementation
         if (node->getNodeType() == expression::oper) {
-
-        } else if (node->getNodeType() == expression::number) {
-
+            node->setRightNode(stackNode_.pop());
+            node->setLeftNode(stackNode_.pop());
+            stackNode_.push(std::move(node));
         } else {
-
+            stackNode_.push(std::move(node));
         }
     }
 
