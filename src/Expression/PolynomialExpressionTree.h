@@ -21,24 +21,6 @@ private:
     node polynomialFirst_;
     node polynomialSecond;
 
-//    StackNode stackNode_;
-    node tree_;
-
-    void push(node node_to_push) {
-        if (tree_ == nullptr) {
-            tree_ = std::move(node_to_push);
-        } else {
-            node_to_push->setRightNode(std::move(tree_));
-            tree_ = std::move(node_to_push);
-        }
-    }
-
-    node pop() {
-        node p = std::move(tree_);
-        tree_ = p->getRightNode();
-        return p;
-    }
-
 public:
     PolynomialExpressionTree() = default;
     PolynomialExpressionTree(const PolynomialExpressionTree& rhs) = delete;
@@ -48,14 +30,11 @@ public:
     virtual ~PolynomialExpressionTree() = default;
 
     virtual void addNode(std::unique_ptr<Node> node) override {
-        // TODO: add implementation
-        if (node->getNodeType() == expression::oper) {
-            node->setRightNode(pop());
-            node->setLeftNode(pop());
-            push(std::move(node));
-        } else {
-            push(std::move(node));
-        }
+        ExpressionTree::addNode(std::move(node));
+    }
+
+    virtual void eval() override {
+
     }
 
 #if defined(UNIT_TESTS)

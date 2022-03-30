@@ -42,31 +42,5 @@ public:
 
 };
 
-class StackNode {
-    using node = std::unique_ptr<Node>;
-private:
-    node head_ = nullptr;
-public:
-    StackNode() = default;
-    StackNode(const StackNode& rhs) = delete;
-    StackNode(StackNode&& rhs) = default;
-    StackNode& operator=(const StackNode& rhs) = delete;
-    StackNode& operator=(StackNode&& rhs) = default;
-    virtual ~StackNode() = default;
-
-    void push(node u_ptr) {
-        if (head_ == nullptr) {
-            head_ = std::move(u_ptr);
-        } else {
-            u_ptr->setRightNode(std::move(head_));
-            head_ = std::move(u_ptr);
-        }
-    };
-    node pop() {
-        node ret = std::move(head_);
-        head_ = ret->getRightNode();
-        return ret;
-    };
-};
 
 #endif //COMPUTOR_V1_NODE_H
