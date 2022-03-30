@@ -17,7 +17,8 @@ namespace {
 class UnknownNode : public Node {
 private:
     char value_;
-    int pow_ = 0;
+    int pow_ = 1;
+    double multipliable_ = 1;
 public:
     UnknownNode() : Node(kTypeUnknown) {}
     UnknownNode(const UnknownNode& rhs) = delete;
@@ -28,11 +29,40 @@ public:
 
     char getValue() const { return value_; }
     void setPow(int pow) {pow_ = pow; }
+    void setMultipliabele(double number) { multipliable_ = number; }
 
     friend std::ostream &operator<<(std::ostream &os, const UnknownNode &node) {
         os << node.value_ << "^" << node.pow_;
         return os;
     }
+
+    UnknownNode& operator*=(const UnknownNode& rhs) {
+        pow_ += rhs.pow_;
+        multipliable_ *= rhs.multipliable_;
+        return *this;
+    }
+
+    UnknownNode& operator+=(const UnknownNode& rhs) {
+        pow_ += rhs.pow_;
+        multipliable_ *= rhs.multipliable_;
+        return *this;
+    }
+
+
+
+
+    UnknownNode& operator*=(const NumberNode<double>& rhs) {
+        multipliable_ += rhs.getValue();
+        return *this;
+    }
+
+    UnknownNode& operator*=(const NumberNode<int>& rhs) {
+        multipliable_ += rhs.getValue();
+        return *this;
+    }
+
+
+
 };
 
 #endif //COMPUTOR_V1_UNKNOWNNODE_H

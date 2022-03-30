@@ -17,9 +17,24 @@
 class PolynomialExpressionTree : public ExpressionTree {
     using node = std::unique_ptr<Node>;
 private:
+    // FIXME: change node to std::shared_ptr
     node polynomialZero_;
     node polynomialFirst_;
     node polynomialSecond;
+
+    Node* evl(Node* link) {
+        if (!link->getLeftNode().get() && !link->getRightNode().get()) {
+            return link;
+        }
+
+        Node* left = evl(link->getLeftNode().get());
+        Node* right = evl(link->getRightNode().get());
+
+        (void)left;
+        (void)right;
+
+        return nullptr;
+    }
 
 public:
     PolynomialExpressionTree() = default;
@@ -33,8 +48,9 @@ public:
         ExpressionTree::addNode(std::move(node));
     }
 
-    virtual void eval() override {
-
+    virtual bool eval() override {
+        evl(ExpressionTree::tree_.get());
+        return true;
     }
 
 #if defined(UNIT_TESTS)

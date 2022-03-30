@@ -9,8 +9,9 @@
 
 class ExpressionTree {
     using node = std::unique_ptr<Node>;
-private:
+protected:
     node tree_;
+private:
 
     void push(node node_to_push) {
         if (tree_ == nullptr) {
@@ -43,10 +44,11 @@ public:
         } else {
             push(std::move(node));
         }
-    };
-    virtual void eval() {
-        
-    };
+    }
+
+    virtual bool eval() {
+        return true;
+    }
 };
 
 #endif //COMPUTOR_V1_EXPRESSIONTREE_H

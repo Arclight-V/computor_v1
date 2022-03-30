@@ -322,11 +322,13 @@ bool Computor_v1::parse() {
 
     ConvertInfixNotationToRPN();
 
-    if (CreateTree()) {
+    if (!CreateTree()) {
         return false;
     }
 
+    if (!expressionTree_->eval()) {
 
+    }
     return true;
 }
 
