@@ -19,15 +19,17 @@ namespace expression {
 using namespace expression;
 
 class Node : public IExpressionNode {
-    using node = std::unique_ptr<Node>;
+    using node = std::shared_ptr<Node>;
 private:
     node left_;
     node right_;
     const NodeType type_;
-
 public:
     Node() : type_(NodeType::base) {}
-    Node(NodeType type) : type_(type) {}
+
+    Node(NodeType type) : type_(type) {
+        std::cout << "this" << '\n';
+    }
     Node(const Node& rhs) = delete;
     Node(Node&& rhs) = default;
     Node& operator=(const Node& rhs) = delete;
@@ -42,5 +44,6 @@ public:
 
 };
 
+//int Node::i = 0;
 
 #endif //COMPUTOR_V1_NODE_H

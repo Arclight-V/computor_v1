@@ -26,42 +26,20 @@ public:
     virtual ~UnknownNode() = default;
 
     UnknownNode(char value) : Node(kTypeUnknown), value_(value) {}
+    UnknownNode(char value,
+                int pow,
+                double multipliable) :  Node(kTypeUnknown),
+                                        value_(value),
+                                        pow_(pow),
+                                        multipliable_(multipliable) {}
 
     char getValue() const { return value_; }
-    void setPow(int pow) {pow_ = pow; }
-    void setMultipliabele(double number) { multipliable_ = number; }
+    int getPow() const { return pow_; }
 
     friend std::ostream &operator<<(std::ostream &os, const UnknownNode &node) {
         os << node.value_ << "^" << node.pow_;
         return os;
     }
-
-    UnknownNode& operator*=(const UnknownNode& rhs) {
-        pow_ += rhs.pow_;
-        multipliable_ *= rhs.multipliable_;
-        return *this;
-    }
-
-    UnknownNode& operator+=(const UnknownNode& rhs) {
-        pow_ += rhs.pow_;
-        multipliable_ *= rhs.multipliable_;
-        return *this;
-    }
-
-
-
-
-    UnknownNode& operator*=(const NumberNode<double>& rhs) {
-        multipliable_ += rhs.getValue();
-        return *this;
-    }
-
-    UnknownNode& operator*=(const NumberNode<int>& rhs) {
-        multipliable_ += rhs.getValue();
-        return *this;
-    }
-
-
 
 };
 

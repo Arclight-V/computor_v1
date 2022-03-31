@@ -15,23 +15,25 @@
 
 
 class PolynomialExpressionTree : public ExpressionTree {
-    using node = std::unique_ptr<Node>;
+    using node_s = std::shared_ptr<Node>;
 private:
     // FIXME: change node to std::shared_ptr
-    node polynomialZero_;
-    node polynomialFirst_;
-    node polynomialSecond;
+    node_s polynomialZero_;
+    node_s polynomialFirst_;
+    node_s polynomialSecond;
 
     Node* evl(Node* link) {
         if (!link->getLeftNode().get() && !link->getRightNode().get()) {
             return link;
         }
 
-        Node* left = evl(link->getLeftNode().get());
-        Node* right = evl(link->getRightNode().get());
+        sum(link->getLeftNode(), link->getRightNode());
 
-        (void)left;
-        (void)right;
+//        Node* left = evl(link->getLeftNode().get());
+//        Node* right = evl(link->getRightNode().get());
+//
+//        (void)left;
+//        (void)right;
 
         return nullptr;
     }
@@ -44,12 +46,12 @@ public:
     PolynomialExpressionTree& operator=(PolynomialExpressionTree&& rhs) = default;
     virtual ~PolynomialExpressionTree() = default;
 
-    virtual void addNode(std::unique_ptr<Node> node) override {
+    virtual void addNode(node_s node) override {
         ExpressionTree::addNode(std::move(node));
     }
 
     virtual bool eval() override {
-        evl(ExpressionTree::tree_.get());
+//        evl(ExpressionTree::tree_.get());
         return true;
     }
 
