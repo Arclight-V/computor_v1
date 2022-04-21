@@ -24,10 +24,10 @@ protected:
             return ret;
         } else if ((lhs->getNodeType() == expression::unknown &&
                    rhs->getNodeType() == expression::unknown) &&
-                ()
+//                ()
                 (static_cast<UnknownNode*>(lhs.get())->getPow() ==
                 static_cast<UnknownNode*>(rhs.get())->getPow())) {
-            node_s ret = std::make_shared<>()
+//            node_s ret = std::make_shared<>()
         }
         return nullptr;
     }
