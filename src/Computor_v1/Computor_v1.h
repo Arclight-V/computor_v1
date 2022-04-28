@@ -114,8 +114,18 @@ public:
 
 #if defined(UNIT_TESTS)
     expression_tree getExpressionTree() { return std::move(expressionTree_); };
+    friend class UnitTestComputor_v1;
 #endif
 };
 
+#if defined(UNIT_TESTS)
+    class UnitTestComputor_v1 {
+    public:
+        UnitTestComputor_v1() = default;
+        UnitTestComputor_v1(const UnitTestComputor_v1& rhs) = delete;
+        UnitTestComputor_v1& operator=(const Computor_v1& rhs) = delete;
+        std::string getLine(const Computor_v1& computorV1) const { return computorV1.line_; }
+    };
+#endif
 
 #endif //COMPUTOR_V1_Computor_v1_H

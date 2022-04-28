@@ -7,7 +7,9 @@ set(CMAKE_CXX_FLAGS "-Wall -Wextra -Werror -Waddress -Wunused")
 include_directories(src)
 
 add_subdirectory(src)
-add_subdirectory(unit_tests)
-add_subdirectory(lib/googletest)
-link_directories(lib/googletest/googletest/include)
-
+enable_testing()
+option(tests "Build unit tests." ON)
+if (tests)
+    add_compile_definitions(UNIT_TESTS)
+    add_subdirectory(unit_tests)
+endif()

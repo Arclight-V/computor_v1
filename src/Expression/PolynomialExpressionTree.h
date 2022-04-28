@@ -57,7 +57,7 @@ public:
 
 #if defined(UNIT_TESTS)
 
-    node getTreeNode() { return std::move(tree_); }
+//    node getTreeNode() { return std::move(tree_); }
 
 #endif
 
