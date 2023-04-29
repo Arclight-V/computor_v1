@@ -9,8 +9,11 @@
 
 class Computor {
 public:
-    virtual bool LexicalAnalyzer(const std::string& str) = 0;
+    virtual bool Analyzer(const std::string& str) = 0;
     virtual ~Computor() = default;
+private:
+    virtual bool LexicalAnalyzer(const std::string& str) = 0;
+    virtual bool SyntaxAnalyzer(const std::string& str) = 0;
 };
 
 #endif //COMPUTOR_V1_COMPUTOR_H

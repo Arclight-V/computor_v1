@@ -12,8 +12,12 @@ int main(int argc, char* argv[]) {
         exit(EXIT_FAILURE);
     }
     std::string str(argv[1]);
-    Computor_v1* computorV1 = new Computor_v1;
-    computorV1->LexicalAnalyzer(str);
+    Computor_v1 computorV1;
+    if (!computorV1.Analyzer(str)) {
+
+    } else {
+
+    }
 
 
     return EXIT_SUCCESS;

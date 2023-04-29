@@ -14,7 +14,7 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 enable_testing()
-
+add_compile_definitions(UNIT_TESTS)
 set(SOURCE_FILES TestComputor_v1WithFixture.cpp ../src/Computor/Computor_v1.h ../src/Computor/Computor_v1.cpp ../src/Computor/Computor.h)
 add_executable( ${PROJECT_NAME} ${SOURCE_FILES})
 target_link_libraries(
