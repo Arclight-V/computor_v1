@@ -8,4 +8,6 @@ add_executable(${PROJECT_NAME} main.cpp Computor_v1/Computor_v1.cpp
                                         ErrorManager/IErrorManager.h Expression/IExpressionNode.h
                                         Expression/OperatorNode.h Expression/UnknownNode.h
                                         Expression/Node.h Expression/NumberNode.h
-                                        Expression/PolynomialExpressionTree.h Expression/ExpressionTree.h)
+                                        Expression/PolynomialExpressionTree.h Expression/ExpressionTree.h
+                                        Analyzer/Analyzer.cpp
+                                        Analyzer/Analyzer.h)

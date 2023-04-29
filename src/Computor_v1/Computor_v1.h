@@ -14,39 +14,6 @@
 #include "Expression/PolynomialExpressionTree.h"
 #include "Expression/Creator.h"
 
-namespace {
-    enum Punctuator {
-        gap = ' ',
-        plus = '+',
-        minus = '-',
-        multiply = '*',
-        pow = '^',
-        dot = '.',
-        equally = '=',
-        left_bracket = '(',
-        right_bracket = ')',
-        none
-    };
-
-    enum KeyWord {
-        X_ = 'X',
-        x_ = 'x',
-    };
-
-    enum Operators  {
-        ADDITION = '+',
-        SUBTRACTION = '-',
-        MULTIPLICATION = '*',
-        POWER = '^'
-    };
-
-    enum class Associativity {
-        LEFT,
-        RIGHT
-    };
-
-} // namespace
-
 
 class Computor_v1 {
 private:
