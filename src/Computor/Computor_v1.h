@@ -5,14 +5,19 @@
 #ifndef COMPUTOR_V1_COMPUTOR_V1_H
 #define COMPUTOR_V1_COMPUTOR_V1_H
 
-#include "Computor/Computor.h"
+#include "Computor.h"
+
+namespace {
+    constexpr const char* allow_chars {"1234567890Xx*-+=^. "};
+}
 
 class Computor_v1 : public Computor {
 public:
-    Computor_v1() {};
+    Computor_v1() = default;
+
+    virtual ~Computor_v1() = default;
 
     bool LexicalAnalyzer(const std::string &str) override;
-
 };
 
 

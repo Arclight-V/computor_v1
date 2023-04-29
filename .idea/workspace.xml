@@ -3,14 +3,20 @@
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
-  <component name="CMakePresetLoader">{
-  &quot;useNewFormat&quot;: true
-}</component>
+  <component name="CMakePresetLoader"><![CDATA[{
+  "useNewFormat": true
+}]]></component>
   <component name="CMakeReloadState">
     <option name="reloaded" value="true" />
   </component>
   <component name="CMakeRunConfigurationManager">
-    <generated />
+    <generated>
+      <config projectName="computor_v1_unit_tests" targetName="gtest" />
+      <config projectName="computor_v1_unit_tests" targetName="gmock_main" />
+      <config projectName="computor_v1_unit_tests" targetName="computor_v1_unit_tests" />
+      <config projectName="computor_v1_unit_tests" targetName="gmock" />
+      <config projectName="computor_v1_unit_tests" targetName="gtest_main" />
+    </generated>
   </component>
   <component name="CMakeSettings">
     <configurations>
@@ -18,13 +24,18 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2b187787-8329-4159-97c0-512b192853b3" name="Changes" comment="check args">
-      <change afterPath="$PROJECT_DIR$/src/Computor/Computor.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Computor/Computor_v1.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Computor/Computor_v1.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/CMakeLists.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.cpp" afterDir="false" />
+    <list default="true" id="f7828caa-c2ac-4b9f-9a4f-bebe7818e457" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/unit_tests/CMakeLists.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/unit_tests/TestComputor_v1WithFixture.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/CMakeLists.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Computor/Computor.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/Computor/Computor.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Computor/Computor_v1.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Computor/Computor_v1.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Computor/Computor_v1.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/Computor/Computor_v1.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.cpp" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,6 +45,7 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
@@ -41,15 +53,7 @@
       </list>
     </option>
   </component>
-  <component name="FormatOnSaveOptions">
-    <option name="myRunOnSave" value="true" />
-  </component>
   <component name="Git.Settings">
-    <option name="RECENT_BRANCH_BY_REPOSITORY">
-      <map>
-        <entry key="$PROJECT_DIR$" value="main" />
-      </map>
-    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MarkdownSettingsMigration">
@@ -60,101 +64,103 @@
     <option name="majorVersion" value="2022" />
     <option name="minorVersion" value="3.1" />
   </component>
-  <component name="ProjectId" id="2KEodZCtyl7adQOS03UQMApNVCb" />
-  <component name="ProjectLevelVcsManager">
-    <ConfirmationsSetting value="2" id="Add" />
-  </component>
+  <component name="ProjectId" id="2P6JBWn8TRlR6CJEpA3uRs9Bgtq" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
-    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/vladimir/develop/42/computor_v1&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;actions.on.save&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "cf.first.check.clang-format": "false",
+    "cidr.known.project.marker": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
+  <component name="RunManager" selected="Google Test.Computor_v1Fixture">
+    <configuration default="true" type="CLionExternalRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
+      <method v="2">
+        <option name="CLION.EXTERNAL.BUILD" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Computor_v1Fixture" type="CMakeGoogleTestRunConfigurationType" factoryName="Google Test" temporary="true" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="computor_v1_unit_tests" TARGET_NAME="computor_v1_unit_tests" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="computor_v1_unit_tests" RUN_TARGET_NAME="computor_v1_unit_tests" TEST_CLASS="Computor_v1Fixture" TEST_MODE="SUITE_TEST">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+        <option name="BeforeTestRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Computor_v1Fixture.LexicalAnalizer" type="CMakeGoogleTestRunConfigurationType" factoryName="Google Test" temporary="true" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="computor_v1_unit_tests" TARGET_NAME="computor_v1_unit_tests" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="computor_v1_unit_tests" RUN_TARGET_NAME="computor_v1_unit_tests" TEST_CLASS="Computor_v1Fixture" TEST_METHOD="LexicalAnalizer" TEST_MODE="SUITE_TEST">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+        <option name="BeforeTestRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="computor_v1_unit_tests" type="CMakeListConfigurationType" factoryName="CMakeListConfigurationFactory" temporary="true">
+      <method v="2" />
+    </configuration>
+    <configuration name="computor_v1" type="CMakeRunConfiguration" factoryName="Application" PROGRAM_PARAMS="&quot;5 * X^0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0a&quot;" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="computor_v1_unit_tests" TARGET_NAME="computor_v1" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="computor_v1_unit_tests" RUN_TARGET_NAME="computor_v1">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="gmock" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="computor_v1_unit_tests" TARGET_NAME="gmock" CONFIG_NAME="Debug">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="gmock_main" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="computor_v1_unit_tests" TARGET_NAME="gmock_main" CONFIG_NAME="Debug">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="gtest" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="computor_v1_unit_tests" TARGET_NAME="gtest" CONFIG_NAME="Debug">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="gtest_main" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="computor_v1_unit_tests" TARGET_NAME="gtest_main" CONFIG_NAME="Debug">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="CMake Application.computor_v1" />
+      <item itemvalue="CMake Application.gmock" />
+      <item itemvalue="CMake Application.gmock_main" />
+      <item itemvalue="CMake Application.gtest" />
+      <item itemvalue="CMake Application.gtest_main" />
+      <item itemvalue="CMake Debug.computor_v1_unit_tests" />
+      <item itemvalue="Google Test.Computor_v1Fixture" />
+      <item itemvalue="Google Test.Computor_v1Fixture.LexicalAnalizer" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Google Test.Computor_v1Fixture" />
+        <item itemvalue="Google Test.Computor_v1Fixture.LexicalAnalizer" />
+        <item itemvalue="CMake Debug.computor_v1_unit_tests" />
+      </list>
+    </recent_temporary>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="2b187787-8329-4159-97c0-512b192853b3" name="Changes" comment="" />
-      <created>1673549191477</created>
+      <changelist id="f7828caa-c2ac-4b9f-9a4f-bebe7818e457" name="Changes" comment="" />
+      <created>1682771463693</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1673549191477</updated>
-      <workItem from="1673549193391" duration="6455000" />
-      <workItem from="1673557659339" duration="3615000" />
-      <workItem from="1673617751258" duration="1824000" />
-      <workItem from="1673697099150" duration="3040000" />
-      <workItem from="1674057239283" duration="940000" />
-      <workItem from="1674117458721" duration="8991000" />
-      <workItem from="1682350388009" duration="1364000" />
-      <workItem from="1682763691263" duration="304000" />
-      <workItem from="1682764117164" duration="5416000" />
-      <workItem from="1682770492584" duration="196000" />
-      <workItem from="1682770696187" duration="1000" />
+      <updated>1682771463693</updated>
+      <workItem from="1682771464929" duration="8711000" />
     </task>
-    <task id="LOCAL-00001" summary="refactoring">
-      <created>1682763862735</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1682763862735</updated>
-    </task>
-    <task id="LOCAL-00002" summary="check args">
-      <created>1682768438229</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1682768438229</updated>
-    </task>
-    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
-  </component>
-  <component name="Vcs.Log.Tabs.Properties">
-    <option name="TAB_STATES">
-      <map>
-        <entry key="MAIN">
-          <value>
-            <State>
-              <option name="FILTERS">
-                <map>
-                  <entry key="branch">
-                    <value>
-                      <list>
-                        <option value="create_analyzer" />
-                      </list>
-                    </value>
-                  </entry>
-                </map>
-              </option>
-            </State>
-          </value>
-        </entry>
-      </map>
-    </option>
-  </component>
-  <component name="VcsManagerConfiguration">
-    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="refactoring" />
-    <MESSAGE value="check args" />
-    <option name="LAST_COMMIT_MESSAGE" value="check args" />
   </component>
 </project>
