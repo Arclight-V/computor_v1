@@ -1,21 +1,17 @@
-#include <iostream>
+//
+// Created by Arclight-V on 29.04.2023.
+//
 
-#include "Computor_v1/Computor_v1.h"
+#include <iostream>
+#include <iomanip>
 
 int main(int argc, char* argv[]) {
 
     if (argc != 2) {
-        std::cerr << "Error: argc must by 2\n";
+        std::cerr << "# " << std::setw(std::strlen("Example:")) << "Error: " << "missing equation\n";
+        std::cerr << std::setw(std::strlen("Example:") + 2)
+                    << "Example: " << "./computor_v1 \"5 * X^0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0\"\n";
         exit(EXIT_FAILURE);
-    }
-
-    Computor_v1 Computor_v1(argv[1]);
-
-    bool is_ok =  Computor_v1.parse();
-    if (is_ok) {
-        Computor_v1.PrintSolution();
-    } else {
-        Computor_v1.PrintError();
     }
 
     return EXIT_SUCCESS;
