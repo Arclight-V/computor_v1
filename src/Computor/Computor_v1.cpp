@@ -2,8 +2,6 @@
 // Created by Arclight-V on 29.04.2023.
 //
 
-#include <iostream>
-
 #include "Computor_v1.h"
 
 bool Computor_v1::Analyzer(const std::string &str) {
@@ -21,12 +19,23 @@ bool Computor_v1::LexicalAnalyzer(const std::string &str) {
         std::cout << "# " << str << "\n" <<  "is |" << str[found] << "| " << "position " << found << "\n";
         ++found;
     }
-
-    return false;
+    return true;
 }
 
 bool Computor_v1::SyntaxAnalyzer(const std::string &str) {
-    (void)str;
+    for (auto first(std::begin(str)),
+            second(first + 1);
+            second != std::end(str); ++first, ++second) {
+        //TODO: do it
+        switch (*first) {
+            case 'x' :
+            case 'X':
+                std::cout << *first << " ";
+            default:
+                break;
+        }
+    }
+
     return true;
 }
 

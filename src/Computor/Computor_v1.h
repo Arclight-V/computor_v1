@@ -5,6 +5,8 @@
 #ifndef COMPUTOR_V1_COMPUTOR_V1_H
 #define COMPUTOR_V1_COMPUTOR_V1_H
 
+#include <iostream>
+
 #include "Computor.h"
 
 namespace {
