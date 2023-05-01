@@ -14,7 +14,7 @@ int main(int argc, char* argv[]) {
     std::string str(argv[1]);
     Computor_v1 computorV1;
     if (!computorV1.Analyzer(str)) {
-
+        computorV1.PrintErrors();
     } else {
 
     }

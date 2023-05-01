@@ -6,8 +6,10 @@
 #define COMPUTOR_V1_COMPUTOR_V1_H
 
 #include <iostream>
+#include <sstream>
 
-#include "Computor.h"
+#include "Computor/Computor.h"
+#include "ErrorHandler/ErrorHandler.h"
 
 namespace {
     constexpr const char* allow_chars {"1234567890Xx*-+=^. "};
@@ -39,11 +41,13 @@ public:
 
     // Computor
     bool Analyzer(const std::string& str) override;
-
+    void PrintErrors() override;
 private:
     // Computor
     bool LexicalAnalyzer(const std::string &str) override;
     bool SyntaxAnalyzer(const std::string& str) override;
+
+    ErrorHandler errorHandler;
 };
 
 

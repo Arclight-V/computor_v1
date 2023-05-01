@@ -10,6 +10,7 @@
 class Computor {
 public:
     virtual bool Analyzer(const std::string& str) = 0;
+    virtual void PrintErrors() = 0;
     virtual ~Computor() = default;
 private:
     virtual bool LexicalAnalyzer(const std::string& str) = 0;
