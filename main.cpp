@@ -1,7 +1,7 @@
 #include <iostream>
 #include <iomanip>
 
-#include "src/Computor/Computor_v1.h"
+#include "Computor/Computor_v1.h"
 
 int main(int argc, char* argv[]) {
 
@@ -11,9 +11,9 @@ int main(int argc, char* argv[]) {
                   << "Example: " << "./computor_v1 \"5 * X^0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0\"\n";
         exit(EXIT_FAILURE);
     }
-    std::string str(argv[1]);
+    std::stringstream ss(argv[1]);
     Computor_v1 computorV1;
-    if (!computorV1.Analyzer(str)) {
+    if (!computorV1.Analyzer(ss)) {
         computorV1.PrintErrors();
     } else {
 

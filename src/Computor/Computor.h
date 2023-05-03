@@ -6,10 +6,11 @@
 #define COMPUTOR_V1_COMPUTOR_H
 
 #include <string>
+#include <sstream>
 
 class Computor {
 public:
-    virtual bool Analyzer(const std::string& str) = 0;
+    virtual bool Analyzer(std::stringstream &ss) = 0;
     virtual void PrintErrors() = 0;
     virtual ~Computor() = default;
 private:

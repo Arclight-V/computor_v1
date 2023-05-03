@@ -13,6 +13,8 @@ void ErrorHandler::add(const std::string& err, size_t pos) {
     errors.push_back(to_add);
 }
 
+
+
 void ErrorHandler::PrintErrors() {
     size_t count = 0;
     for (auto& err: errors) {

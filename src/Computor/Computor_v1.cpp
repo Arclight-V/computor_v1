@@ -4,9 +4,16 @@
 
 #include "Computor/Computor_v1.h"
 
-bool Computor_v1::Analyzer(const std::string &str) {
-    if (!LexicalAnalyzer(str) ) {
-        return errorHandler.empty();
+bool Computor_v1::Analyzer(std::stringstream &ss) {
+    std::string str;
+    str.reserve(ss.str().size());
+    while (!ss.eof()) {
+        std::string tmp;
+        ss >> tmp;
+        str +=tmp;
+    }
+    if (!LexicalAnalyzer(str) || !SyntaxAnalyzer(str)) {
+        return false;
     }
 
     return true;
@@ -18,7 +25,6 @@ bool Computor_v1::LexicalAnalyzer(const std::string &str) {
         found = str.find_first_not_of(allow_chars, found)) {
 
         //TODO: move to error_manager
-//        std::cout << "# " << str << "\n" <<  "is |" << str[found] << "| " << "position " << found << "\n";
         errorHandler.add(str + "\nInvalid character", found);
         ++found;
     }

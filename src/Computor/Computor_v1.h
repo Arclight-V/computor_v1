@@ -6,7 +6,6 @@
 #define COMPUTOR_V1_COMPUTOR_V1_H
 
 #include <iostream>
-#include <sstream>
 
 #include "Computor/Computor.h"
 #include "ErrorHandler/ErrorHandler.h"
@@ -40,7 +39,7 @@ public:
     virtual ~Computor_v1() = default;
 
     // Computor
-    bool Analyzer(const std::string& str) override;
+    bool Analyzer(std::stringstream &ss) override;
     void PrintErrors() override;
 private:
     // Computor

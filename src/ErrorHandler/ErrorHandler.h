@@ -9,6 +9,7 @@
 #include <string>
 #include <iostream>
 #include <iomanip>
+#include <sstream>
 
 namespace {
     constexpr const char* kRed = "\x1b[31m";
@@ -47,6 +48,7 @@ public:
     };
 private:
     std::list<std::string> errors;
+    std::stringstream ss;
 };
 
 
