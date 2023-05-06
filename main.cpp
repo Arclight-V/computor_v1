@@ -12,8 +12,8 @@ int main(int argc, char* argv[]) {
         exit(EXIT_FAILURE);
     }
     std::stringstream ss(argv[1]);
-    Computor_v1 computorV1;
-    if (!computorV1.Analyzer(ss)) {
+    Computor_v1 computorV1(std::move(ss));
+    if (!computorV1.Analyzer()) {
         computorV1.PrintErrors();
     } else {
 

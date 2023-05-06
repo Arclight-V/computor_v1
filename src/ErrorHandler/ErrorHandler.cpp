@@ -4,12 +4,30 @@
 
 #include "ErrorHandler.h"
 
-void ErrorHandler::add(const std::string& err, size_t pos) {
+ErrorHandler::ErrorHandler(const std::string &str) : str(str) {}
+
+void ErrorHandler::add(errorhandler::err err, size_t pos) {
     std::string to_add;
-    to_add.reserve(err.size() + std::strlen(kRed) + std::strlen(kNormal));
-    to_add = err;
+    auto len = [=](errorhandler::err e){
+        switch (e) {
+            case errorhandler::err::INVALID_CHARACTER:
+                return kLenInvalidCharacter + 1;
+            default:
+                break;
+        }
+    }(err);
+    to_add.reserve(str.size() + len + kLenRed + kLenNormal);
+    auto* err_str = [](errorhandler::err e) {
+        switch (e) {
+            case errorhandler::err::INVALID_CHARACTER:
+                return kInvalidCharacter;
+            default:
+                break;
+        }
+    }(err);
+    to_add = str + '\n' + err_str;
     to_add.insert(pos, kRed);
-    to_add.insert(pos + strlen(kRed) + 1, kNormal);
+    to_add.insert(pos + kLenRed + 1, kNormal);
     errors.push_back(to_add);
 }
 
@@ -24,8 +42,8 @@ void ErrorHandler::PrintErrors() {
 }
 
 #if defined(UNIT_TESTS)
-const std::string &TestErrorHandler::TestAdd(ErrorHandler &errorHandler, const std::string &str, size_t pos) {
-    errorHandler.add(str, pos);
+const std::string &TestErrorHandler::TestAdd(ErrorHandler &errorHandler, errorhandler::err err, size_t pos) {
+    errorHandler.add(err, pos);
     return errorHandler.errors.back();
 }
 

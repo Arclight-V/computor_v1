@@ -4,15 +4,18 @@
 
 #include "Computor/Computor_v1.h"
 
-bool Computor_v1::Analyzer(std::stringstream &ss) {
-    std::string str;
-    str.reserve(ss.str().size());
+Computor_v1::Computor_v1(std::stringstream &&ss) : errorHandler(ss.str()), ss(std::move(ss)) {}
+
+bool Computor_v1::Analyzer() {
+    std::string token_str;
+    token_str.reserve(ss.str().size());
     while (!ss.eof()) {
         std::string tmp;
         ss >> tmp;
-        str +=tmp;
+        token_str +=tmp;
     }
-    if (!LexicalAnalyzer(str) || !SyntaxAnalyzer(str)) {
+
+    if (!LexicalAnalyzer(ss.str()) || !SyntaxAnalyzer(token_str)) {
         return false;
     }
 
@@ -23,15 +26,14 @@ bool Computor_v1::LexicalAnalyzer(const std::string &str) {
     for (size_t found = str.find_first_not_of(allow_chars);
         found != std::string::npos;
         found = str.find_first_not_of(allow_chars, found)) {
-
-        //TODO: move to error_manager
-        errorHandler.add(str + "\nInvalid character", found);
+        errorHandler.add(errorhandler::err::INVALID_CHARACTER, found);
         ++found;
     }
     return errorHandler.empty();
 }
 
 bool Computor_v1::SyntaxAnalyzer(const std::string &str) {
+
     bool isEquality = false;
     for (auto first(std::begin(str)),
             second(first + 1);

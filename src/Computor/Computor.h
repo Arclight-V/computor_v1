@@ -10,7 +10,7 @@
 
 class Computor {
 public:
-    virtual bool Analyzer(std::stringstream &ss) = 0;
+    virtual bool Analyzer() = 0;
     virtual void PrintErrors() = 0;
     virtual ~Computor() = default;
 private:

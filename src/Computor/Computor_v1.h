@@ -35,11 +35,11 @@ class Computor_v1 : public Computor {
 #endif
 
 public:
-    Computor_v1() = default;
+    explicit Computor_v1(std::stringstream&& ss);
     virtual ~Computor_v1() = default;
 
     // Computor
-    bool Analyzer(std::stringstream &ss) override;
+    bool Analyzer() override;
     void PrintErrors() override;
 private:
     // Computor
@@ -47,6 +47,7 @@ private:
     bool SyntaxAnalyzer(const std::string& str) override;
 
     ErrorHandler errorHandler;
+    std::stringstream ss;
 };
 
 
