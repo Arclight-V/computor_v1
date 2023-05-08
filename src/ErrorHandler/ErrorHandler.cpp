@@ -14,6 +14,8 @@ void ErrorHandler::add(errorhandler::err err, size_t pos) {
                 return kLenInvalidCharacter + 1;
             case errorhandler::err::INVALID_FIRST_CHARACTER:
                 return kLenSyntaxError1 + 1;
+            case errorhandler::err::INVALID_LAST_CHARACTER:
+                return kLenSyntaxErrorLastCharacter + 1;
             default:
                 break;
         }
@@ -24,7 +26,9 @@ void ErrorHandler::add(errorhandler::err err, size_t pos) {
             case errorhandler::err::INVALID_CHARACTER:
                 return kInvalidCharacter;
             case errorhandler::err::INVALID_FIRST_CHARACTER:
-                return kSyntaxError1;
+                return kSyntaxErrorFirstCharacter;
+            case errorhandler::err::INVALID_LAST_CHARACTER:
+                return kSyntaxErrorLastCharacter;
             default:
                 break;
         }

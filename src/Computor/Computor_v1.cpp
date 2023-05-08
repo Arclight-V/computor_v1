@@ -65,6 +65,7 @@ bool Computor_v1::SyntaxAnalyzer() {
 //        }
 //    }
 
+    check_first_last_elem(*(ss_.str().end() - 1), errorhandler::err::INVALID_LAST_CHARACTER);
     return errorHandler_.empty();
 }
 
