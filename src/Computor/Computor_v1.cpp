@@ -29,18 +29,19 @@ bool Computor_v1::LexicalAnalyzer(const std::string &str) {
 
 bool Computor_v1::SyntaxAnalyzer() {
 //    bool isEquality = false;
-    auto check_first_last_elem = [=](char ch, errorhandler::err err) {
+    auto check_first_last_elem = [=](char ch, errorhandler::err err, size_t pos) {
         switch (ch) {
             case '^':
             case '=':
             case '*':
-                errorHandler_.add(err, 0);
+            case '.':
+                errorHandler_.add(err, pos);
                 return false;
             default:
                 return true;
         }
     };
-    check_first_last_elem(ss_.str()[0], errorhandler::err::INVALID_FIRST_CHARACTER);
+    check_first_last_elem(ss_.str()[0], errorhandler::err::INVALID_FIRST_CHARACTER, 0);
 
 //    while (!ss_.eof()) {
 //        std::string token;
@@ -65,7 +66,7 @@ bool Computor_v1::SyntaxAnalyzer() {
 //        }
 //    }
 
-    check_first_last_elem(*(ss_.str().end() - 1), errorhandler::err::INVALID_LAST_CHARACTER);
+    check_first_last_elem(*(ss_.str().end() - 1), errorhandler::err::INVALID_LAST_CHARACTER, ss_.str().size() - 1);
     return errorHandler_.empty();
 }
 
