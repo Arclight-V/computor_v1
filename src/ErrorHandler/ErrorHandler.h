@@ -19,16 +19,20 @@ namespace {
     // Errors
     constexpr const char* kError = "Error #";
     constexpr const char* kInvalidCharacter = "Invalid character";
+    constexpr const char* kSyntaxError1 = "Expected \'number\' or \'X\' or \'x\'";
 
     const size_t kLenRed = std::strlen(kRed);
     const size_t kLenNormal = std::strlen(kNormal);
     const size_t kLenError = std::strlen(kError);
     const size_t kLenInvalidCharacter = std::strlen(kInvalidCharacter);
+    const size_t kLenSyntaxError1 = std::strlen(kSyntaxError1);
+
 }
 
 namespace errorhandler {
     enum err {
-        INVALID_CHARACTER
+        INVALID_CHARACTER,
+        INVALID_FIRST_CHARACTER
     };
 }
 
@@ -42,7 +46,7 @@ public:
     TestErrorHandler& operator=(const TestErrorHandler&) = delete;
     ~TestErrorHandler() = default;
 
-    const std::string& TestAdd(ErrorHandler& errorHandler, errorhandler::err err, size_t pos);
+    const std::string& TestAdd(ErrorHandler& errorHandler_, errorhandler::err err, size_t pos);
 };
 #endif
 

@@ -12,6 +12,8 @@ void ErrorHandler::add(errorhandler::err err, size_t pos) {
         switch (e) {
             case errorhandler::err::INVALID_CHARACTER:
                 return kLenInvalidCharacter + 1;
+            case errorhandler::err::INVALID_FIRST_CHARACTER:
+                return kLenSyntaxError1 + 1;
             default:
                 break;
         }
@@ -21,6 +23,8 @@ void ErrorHandler::add(errorhandler::err err, size_t pos) {
         switch (e) {
             case errorhandler::err::INVALID_CHARACTER:
                 return kInvalidCharacter;
+            case errorhandler::err::INVALID_FIRST_CHARACTER:
+                return kSyntaxError1;
             default:
                 break;
         }
@@ -42,9 +46,9 @@ void ErrorHandler::PrintErrors() {
 }
 
 #if defined(UNIT_TESTS)
-const std::string &TestErrorHandler::TestAdd(ErrorHandler &errorHandler, errorhandler::err err, size_t pos) {
-    errorHandler.add(err, pos);
-    return errorHandler.errors.back();
+const std::string &TestErrorHandler::TestAdd(ErrorHandler &errorHandler_, errorhandler::err err, size_t pos) {
+    errorHandler_.add(err, pos);
+    return errorHandler_.errors.back();
 }
 
 #endif

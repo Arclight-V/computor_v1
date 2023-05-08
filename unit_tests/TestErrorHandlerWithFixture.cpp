@@ -25,12 +25,17 @@ protected:
         str_err_2 = "\x1b[31ma\x1b[0m5 * X^0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0\n";
         str_err_2 += kInvalidCharacter;
         errorHandler_2 = std::make_unique<ErrorHandler>(str_2);
+
+        str_3 = "=5 * X^0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0";
+        str_err_3 = "\x1b[31m=\x1b[0m5 * X^0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0\n";
+        str_err_3 += kSyntaxError1;
+        errorHandler_3 = std::make_unique<ErrorHandler>(str_3);
     }
     TestErrorHandler  testErrorHandler;
 
-    std::string str_0, str_1, str_2;
-    std::string str_err_0, str_err_1, str_err_2;
-    std::unique_ptr<ErrorHandler> errorHandler_0, errorHandler_1, errorHandler_2;
+    std::string str_0, str_1, str_2, str_3;
+    std::string str_err_0, str_err_1, str_err_2, str_err_3;
+    std::unique_ptr<ErrorHandler> errorHandler_0, errorHandler_1, errorHandler_2, errorHandler_3;
 
 };
 

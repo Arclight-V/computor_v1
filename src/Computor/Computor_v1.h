@@ -22,7 +22,7 @@ public:
     TestComputor_v1() = default;
     ~TestComputor_v1() = default;
     bool TestLexicalAnalyzer(Computor_v1&, const std::string&);
-    bool TestSyntaxAnalyzer(Computor_v1&, const std::string&);
+    bool TestSyntaxAnalyzer(Computor_v1&);
 };
 #endif
 
@@ -44,10 +44,10 @@ public:
 private:
     // Computor
     bool LexicalAnalyzer(const std::string &str) override;
-    bool SyntaxAnalyzer(const std::string& str) override;
+    bool SyntaxAnalyzer() override;
 
-    ErrorHandler errorHandler;
-    std::stringstream ss;
+    ErrorHandler errorHandler_;
+    std::stringstream ss_;
 };
 
 

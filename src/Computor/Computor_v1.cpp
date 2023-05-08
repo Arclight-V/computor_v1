@@ -4,61 +4,72 @@
 
 #include "Computor/Computor_v1.h"
 
-Computor_v1::Computor_v1(std::stringstream &&ss) : errorHandler(ss.str()), ss(std::move(ss)) {}
+Computor_v1::Computor_v1(std::stringstream &&ss) : errorHandler_(ss.str()), ss_(std::move(ss)) {}
 
 bool Computor_v1::Analyzer() {
-    std::string token_str;
-    token_str.reserve(ss.str().size());
-    while (!ss.eof()) {
-        std::string tmp;
-        ss >> tmp;
-        token_str +=tmp;
-    }
-
-    if (!LexicalAnalyzer(ss.str()) || !SyntaxAnalyzer(token_str)) {
+    LexicalAnalyzer(ss_.str());
+    SyntaxAnalyzer();
+    if (!errorHandler_.empty()) {
         return false;
     }
 
     return true;
 }
 
+// TODO:: to delete signature, to use ss_.str()
 bool Computor_v1::LexicalAnalyzer(const std::string &str) {
     for (size_t found = str.find_first_not_of(allow_chars);
         found != std::string::npos;
         found = str.find_first_not_of(allow_chars, found)) {
-        errorHandler.add(errorhandler::err::INVALID_CHARACTER, found);
+        errorHandler_.add(errorhandler::err::INVALID_CHARACTER, found);
         ++found;
     }
-    return errorHandler.empty();
+    return errorHandler_.empty();
 }
 
-bool Computor_v1::SyntaxAnalyzer(const std::string &str) {
-
-    bool isEquality = false;
-    for (auto first(std::begin(str)),
-            second(first + 1);
-            second != std::end(str); ++first, ++second) {
-        //TODO: do it
-        switch (*first) {
+bool Computor_v1::SyntaxAnalyzer() {
+//    bool isEquality = false;
+    auto check_first_last_elem = [=](char ch, errorhandler::err err) {
+        switch (ch) {
+            case '^':
             case '=':
-                if (!isEquality) {
-
-                } else {
-
-                }
-            case 'x':
-            case 'X':
-                std::cout << *first << " ";
+            case '*':
+                errorHandler_.add(err, 0);
+                return false;
             default:
-                break;
+                return true;
         }
-    }
+    };
+    check_first_last_elem(ss_.str()[0], errorhandler::err::INVALID_FIRST_CHARACTER);
 
-    return true;
+//    while (!ss_.eof()) {
+//        std::string token;
+//        ss_ >> token;
+//        for (auto first(std::begin(token)),
+//                     second(first + 1);
+//             second != std::end(token); ++first, ++second) {
+//            //TODO: do it
+//            switch (*first) {
+//                case '=':
+//                    if (!isEquality) {
+//
+//                    } else {
+//
+//                    }
+//                case 'x':
+//                case 'X':
+//                    std::cout << *first << " ";
+//                default:
+//                    break;
+//            }
+//        }
+//    }
+
+    return errorHandler_.empty();
 }
 
 void Computor_v1::PrintErrors() {
-    errorHandler.PrintErrors();
+    errorHandler_.PrintErrors();
 }
 
 #if defined(UNIT_TESTS)
@@ -66,8 +77,8 @@ bool TestComputor_v1::TestLexicalAnalyzer(Computor_v1& computorV1, const std::st
     return computorV1.LexicalAnalyzer(str);
 };
 
-bool TestComputor_v1::TestSyntaxAnalyzer(Computor_v1& computorV1, const std::string& str) {
-    return computorV1.SyntaxAnalyzer(str);
+bool TestComputor_v1::TestSyntaxAnalyzer(Computor_v1& computorV1) {
+    return computorV1.SyntaxAnalyzer();
 };
 
 #endif
