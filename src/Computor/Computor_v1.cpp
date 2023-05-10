@@ -28,7 +28,6 @@ bool Computor_v1::LexicalAnalyzer(const std::string &str) {
 }
 
 bool Computor_v1::SyntaxAnalyzer() {
-//    bool isEquality = false;
     auto check_first_last_elem = [=](char ch, errorhandler::err err, size_t pos) {
         switch (ch) {
             case '^':
@@ -43,28 +42,29 @@ bool Computor_v1::SyntaxAnalyzer() {
     };
     check_first_last_elem(ss_.str()[0], errorhandler::err::INVALID_FIRST_CHARACTER, 0);
 
-//    while (!ss_.eof()) {
-//        std::string token;
-//        ss_ >> token;
-//        for (auto first(std::begin(token)),
-//                     second(first + 1);
-//             second != std::end(token); ++first, ++second) {
-//            //TODO: do it
-//            switch (*first) {
-//                case '=':
-//                    if (!isEquality) {
-//
-//                    } else {
-//
-//                    }
-//                case 'x':
-//                case 'X':
-//                    std::cout << *first << " ";
-//                default:
-//                    break;
-//            }
-//        }
-//    }
+    bool isEquality = false;
+    while (!ss_.eof()) {
+        std::string token;
+        ss_ >> token;
+        //TODO: do it (for not work!!!)
+        for (auto first(std::begin(token)),
+                     second(first + 1);
+             second != std::end(token); ++first, ++second) {
+
+            switch (*first) {
+                case '=':
+                    if (!isEquality) {
+                        isEquality = true;
+                    } else {
+                        errorHandler_.add(errorhandler::err::TWO_EQUALS, ss_.tellg());
+                    }
+                case 'x':
+                case 'X':
+                default:
+                    break;
+            }
+        }
+    }
 
     check_first_last_elem(*(ss_.str().end() - 1), errorhandler::err::INVALID_LAST_CHARACTER, ss_.str().size() - 1);
     return errorHandler_.empty();

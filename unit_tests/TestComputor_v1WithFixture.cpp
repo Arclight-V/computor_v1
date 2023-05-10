@@ -65,13 +65,17 @@ protected:
         ss11 << s11;
         c11 = std::make_unique<Computor_v1>(std::move(ss11));
 
+        s12 = "5 * X^0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0=";
+        ss12 << s12;
+        c12 = std::make_unique<Computor_v1>(std::move(ss12));
+
 
     }
     TestComputor_v1 t0;
 
-    std::stringstream ss0, ss1, ss2, ss3, ss4, ss5, ss6, ss7, ss8, ss9, ss10, ss11;
-    std::string s0, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11;
-    std::unique_ptr<Computor_v1> c0, c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11;
+    std::stringstream ss0, ss1, ss2, ss3, ss4, ss5, ss6, ss7, ss8, ss9, ss10, ss11, ss12;
+    std::string s0, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12;
+    std::unique_ptr<Computor_v1> c0, c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12;
 };
 
 TEST_F(TestComputor_v1Fixture, LexicalAnalizer) {
@@ -91,5 +95,6 @@ TEST_F(TestComputor_v1Fixture, SyntaxAnalyzer) {
     EXPECT_FALSE(t0.TestSyntaxAnalyzer(*c9));
     EXPECT_FALSE(t0.TestSyntaxAnalyzer(*c10));
     EXPECT_FALSE(t0.TestSyntaxAnalyzer(*c11));
+    EXPECT_FALSE(t0.TestSyntaxAnalyzer(*c12));
 
 }

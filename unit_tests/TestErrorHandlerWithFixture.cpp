@@ -70,12 +70,17 @@ protected:
         se10 = "5 * X^0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0\x1b[31m.\x1b[0m\n";
         se10 += kSyntaxErrorLastCharacter;
         eh10 = std::make_unique<ErrorHandler>(s10);
+
+        s11 = "5 * X^0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0=";
+        se11 = "5 * X^0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0\x1b[31m=\x1b[0m\n";
+        se11 += kSyntaxErrorTwoEquals;
+        eh11 = std::make_unique<ErrorHandler>(s11);
     }
     TestErrorHandler  teh;
 
-    std::string s0, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10;
-    std::string se0, se1, se2, se3, se4, se5, se6, se7, se8, se9, se10;
-    std::unique_ptr<ErrorHandler> eh0, eh1, eh2, eh3, eh4, eh5, eh6, eh7, eh8, eh9, eh10;
+    std::string s0, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11;
+    std::string se0, se1, se2, se3, se4, se5, se6, se7, se8, se9, se10, se11;
+    std::unique_ptr<ErrorHandler> eh0, eh1, eh2, eh3, eh4, eh5, eh6, eh7, eh8, eh9, eh10, eh11;
 
 };
 
@@ -91,4 +96,5 @@ TEST_F(TestErrorHandlerWithFixture, addAndPrint) {
     EXPECT_EQ(se8, teh.TestAdd(*eh8, errorhandler::err::INVALID_LAST_CHARACTER, 39));
     EXPECT_EQ(se9, teh.TestAdd(*eh9, errorhandler::err::INVALID_FIRST_CHARACTER, 0));
     EXPECT_EQ(se10, teh.TestAdd(*eh10, errorhandler::err::INVALID_LAST_CHARACTER, 39));
+    EXPECT_EQ(se11, teh.TestAdd(*eh11, errorhandler::err::TWO_EQUALS, 39));
 }

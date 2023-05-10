@@ -21,6 +21,7 @@ namespace {
     constexpr const char* kInvalidCharacter = "Invalid character";
     constexpr const char* kSyntaxErrorFirstCharacter = "Expected \'number\' or \'X\' or \'x\'";
     constexpr const char* kSyntaxErrorLastCharacter = "Invalid character at the end of an equation";
+    constexpr const char* kSyntaxErrorTwoEquals = "Two equals in equation";
 
     const size_t kLenRed = std::strlen(kRed);
     const size_t kLenNormal = std::strlen(kNormal);
@@ -28,6 +29,7 @@ namespace {
     const size_t kLenInvalidCharacter = std::strlen(kInvalidCharacter);
     const size_t kLenSyntaxError1 = std::strlen(kSyntaxErrorFirstCharacter);
     const size_t kLenSyntaxErrorLastCharacter = std::strlen(kSyntaxErrorLastCharacter);
+    const size_t kLenSyntaxErrorTwoEquals = std::strlen(kSyntaxErrorTwoEquals);
 
 }
 
@@ -35,7 +37,8 @@ namespace errorhandler {
     enum err {
         INVALID_CHARACTER,
         INVALID_FIRST_CHARACTER,
-        INVALID_LAST_CHARACTER
+        INVALID_LAST_CHARACTER,
+        TWO_EQUALS
     };
 }
 
