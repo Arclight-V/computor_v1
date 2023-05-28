@@ -81,7 +81,12 @@ bool Computor_v1::SyntaxAnalyzer() {
                     }
                 case 'x':
                 case 'X':
-
+                    if (iterator ft = std::next(first_token, 1); ft != tokens_.end()) {
+                        if (ft->first == '%' || ft->first == '/') {
+                            errorHandler_.add(errorhandler::err::OPERATION_NOT_SUPPORTED, first_token->second, ft->second);
+                            first_token = ft;
+                        }
+                    }
                 default:
                     break;
             }

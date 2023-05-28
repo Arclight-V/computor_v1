@@ -70,7 +70,6 @@ protected:
 
         // INCORRECT ENTRY
 
-
         s13 << "**5 * X^0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0";
         se13 = "\x1b[31m**\x1b[0m5 * X^0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0";
         eh13 = std::make_unique<ErrorHandler>(s13.str());
@@ -108,20 +107,26 @@ protected:
         eh21 = std::make_unique<ErrorHandler>(s21.str());
 
 
+        // OPERATION NOT SUPPORTED
 
+        s22 << "5 * X%0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0";
+        se22 = "5 * \x1b[31mX%\x1b[0m0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0";
+        eh22 = std::make_unique<ErrorHandler>(s22.str());
 
-
-
-
-
+        s23 << "5 * X/0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0";
+        se23 = "5 * \x1b[31mX/\x1b[0m0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0";
+        eh23 = std::make_unique<ErrorHandler>(s23.str());
 
 
     }
     TestErrorHandler  teh;
 
-    std::stringstream s0, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14, s15, s16, s17, s18, s19, s20, s21;
-    std::string se0, se1, se2, se3, se4, se5, se6, se7, se8, se9, se10, se11, se12, se13, se14, se15, se16, se17, se18, se19, se20, se21 ;
-    std::unique_ptr<ErrorHandler> eh0, eh1, eh2, eh3, eh4, eh5, eh6, eh7, eh8, eh9, eh10, eh11, eh12, eh13, eh14, eh15, eh16, eh17, eh18, eh19, eh20, eh21;
+    std::stringstream s0, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14, s15, s16, s17, s18, s19, s20,
+                        s21, s22, s23;
+    std::string se0, se1, se2, se3, se4, se5, se6, se7, se8, se9, se10, se11, se12, se13, se14, se15, se16, se17, se18,
+                se19, se20, se21, se22, se23;
+    std::unique_ptr<ErrorHandler> eh0, eh1, eh2, eh3, eh4, eh5, eh6, eh7, eh8, eh9, eh10, eh11, eh12, eh13, eh14, eh15,
+                                    eh16, eh17, eh18, eh19, eh20, eh21, eh22, eh23;
 
 };
 
@@ -148,5 +153,7 @@ TEST_F(TestErrorHandlerWithFixture, addAndPrint) {
     EXPECT_EQ(se19, teh.TestAdd(*eh19, errorhandler::err::INCORRECT_ENTRY, 2, 3).first);
     EXPECT_EQ(se20, teh.TestAdd(*eh20, errorhandler::err::INCORRECT_ENTRY, 2, 4).first);
     EXPECT_EQ(se21, teh.TestAdd(*eh21, errorhandler::err::INCORRECT_ENTRY, 2, 5).first);
+    EXPECT_EQ(se22, teh.TestAdd(*eh22, errorhandler::err::INCORRECT_ENTRY, 4, 5).first);
+    EXPECT_EQ(se23, teh.TestAdd(*eh23, errorhandler::err::INCORRECT_ENTRY, 4, 5).first);
 
 }

@@ -19,6 +19,8 @@ namespace errorhandler {
                 return kLenSyntaxErrorTwoEquals + 1;
             case errorhandler::err::INCORRECT_ENTRY:
                 return kLenIncorrectEntry;
+            case errorhandler::err::OPERATION_NOT_SUPPORTED:
+                return kLenOperationIsNotSupported;
             default:
                 break;
         }
@@ -36,6 +38,8 @@ namespace errorhandler {
                 return kSyntaxErrorTwoEquals;
             case errorhandler::err::INCORRECT_ENTRY:
                 return kIncorrectEntry;
+            case errorhandler::err::OPERATION_NOT_SUPPORTED:
+                return kOperationIsNotSupported;
             default:
                 break;
         }

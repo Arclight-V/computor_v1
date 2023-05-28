@@ -26,6 +26,7 @@ namespace {
     constexpr const char* kSyntaxErrorLastCharacter = "Invalid character at the end of an equation";
     constexpr const char* kSyntaxErrorTwoEquals = "Two equals in equation";
     constexpr const char* kIncorrectEntry = "Incorrect entry";
+    constexpr const char* kOperationIsNotSupported = "The operation is not supported";
 
     const size_t kLenRed = std::strlen(kRed);
     const size_t kLenNormal = std::strlen(kNormal);
@@ -35,6 +36,7 @@ namespace {
     const size_t kLenSyntaxErrorLastCharacter = std::strlen(kSyntaxErrorLastCharacter);
     const size_t kLenSyntaxErrorTwoEquals = std::strlen(kSyntaxErrorTwoEquals);
     const size_t kLenIncorrectEntry = std::strlen(kIncorrectEntry);
+    const size_t kLenOperationIsNotSupported = std::strlen(kOperationIsNotSupported);
 
 }
 
@@ -44,7 +46,8 @@ namespace errorhandler {
         INVALID_FIRST_CHARACTER,
         INVALID_LAST_CHARACTER,
         TWO_EQUALS,
-        INCORRECT_ENTRY
+        INCORRECT_ENTRY,
+        OPERATION_NOT_SUPPORTED
     };
 
     size_t getLensError(errorhandler::err e);
