@@ -47,15 +47,16 @@ namespace errorhandler {
 
 }
 
-ErrorHandler::ErrorHandler(const std::string& tokens) : tokens_(tokens) {}
+ErrorHandler::ErrorHandler(const std::string &tokens) : tokens_(tokens) {}
 
 void ErrorHandler::add(errorhandler::err err, size_t pos) {
     std::string to_add(tokens_.size() + kLenRed + kLenNormal, '\0');
-    std::copy(tokens_.begin(), std::next(tokens_.begin(), pos) , to_add.begin());
+    std::copy(tokens_.begin(), std::next(tokens_.begin(), pos), to_add.begin());
     std::copy_n(kRed, kLenRed, std::next(to_add.begin(), pos));
     std::copy_n(std::next(tokens_.begin(), pos), 1, std::next(to_add.begin(), pos + kLenRed));
     std::copy_n(kNormal, kLenNormal, std::next(to_add.begin(), pos + kLenRed + 1));
-    std::copy(std::next(tokens_.begin(), pos + 1), tokens_.end(), std::next(to_add.begin(), pos + kLenRed + kLenNormal + 1));
+    std::copy(std::next(tokens_.begin(), pos + 1), tokens_.end(),
+              std::next(to_add.begin(), pos + kLenRed + kLenNormal + 1));
     errors.push_back({to_add, err});
 }
 
@@ -64,11 +65,13 @@ void ErrorHandler::add(errorhandler::err err, size_t first, size_t last) {
 //        ++last;
 //    }
     std::string to_add(tokens_.size() + kLenRed + kLenNormal, '\0');
-    std::copy(tokens_.begin(), std::next(tokens_.begin(), first) , to_add.begin());
+    std::copy(tokens_.begin(), std::next(tokens_.begin(), first), to_add.begin());
     std::copy_n(kRed, kLenRed, std::next(to_add.begin(), first));
-    std::copy(std::next(tokens_.begin(), first) , std::next(tokens_.begin(), last + 1) , std::next(to_add.begin(), first + kLenRed));
+    std::copy(std::next(tokens_.begin(), first), std::next(tokens_.begin(), last + 1),
+              std::next(to_add.begin(), first + kLenRed));
     std::copy_n(kNormal, kLenNormal, std::next(to_add.begin(), last + kLenRed + 1));
-    std::copy(std::next(tokens_.begin(), last + 1), tokens_.end(), std::next(to_add.begin(), last + kLenRed + kLenNormal + 1));
+    std::copy(std::next(tokens_.begin(), last + 1), tokens_.end(),
+              std::next(to_add.begin(), last + kLenRed + kLenNormal + 1));
 
     errors.push_back({to_add, err});
 }
@@ -84,12 +87,15 @@ void ErrorHandler::PrintErrors() {
 }
 
 #if defined(UNIT_TESTS)
-const std::pair<std::string, errorhandler::err> &TestErrorHandler::TestAdd(ErrorHandler &errorHandler_, errorhandler::err err, size_t pos) {
+
+const std::pair<std::string, errorhandler::err> &
+TestErrorHandler::TestAdd(ErrorHandler &errorHandler_, errorhandler::err err, size_t pos) {
     errorHandler_.add(err, pos);
     return errorHandler_.errors.back();
 }
 
-const std::pair<std::string, errorhandler::err> &TestErrorHandler::TestAdd(ErrorHandler &errorHandler_, errorhandler::err err, size_t first, size_t last) {
+const std::pair<std::string, errorhandler::err> &
+TestErrorHandler::TestAdd(ErrorHandler &errorHandler_, errorhandler::err err, size_t first, size_t last) {
     errorHandler_.add(err, first, last);
     return errorHandler_.errors.back();
 }

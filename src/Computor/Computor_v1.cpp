@@ -69,11 +69,11 @@ bool Computor_v1::SyntaxAnalyzer() {
                 case '/':
                 case '%':
                 case '^':
-                    if (auto ft = std::next(first_token, 1); ft != tokens_.end()) {
+                    if (iterator ft = std::next(first_token, 1); ft != tokens_.end()) {
                         while (isArithmeticOperator(ft->first)) {
                             ++ft;
                         }
-                        if (std::distance(first_token,  ft) != std::distance(first_token,std::next(first_token, 1))) {
+                        if (std::distance(first_token, ft) != std::distance(first_token, std::next(first_token, 1))) {
                             --ft;
                             errorHandler_.add(errorhandler::err::INCORRECT_ENTRY, first_token->second, ft->second);
                             first_token = ft;
@@ -83,7 +83,8 @@ bool Computor_v1::SyntaxAnalyzer() {
                 case 'X':
                     if (iterator ft = std::next(first_token, 1); ft != tokens_.end()) {
                         if (ft->first == '%' || ft->first == '/') {
-                            errorHandler_.add(errorhandler::err::OPERATION_NOT_SUPPORTED, first_token->second, ft->second);
+                            errorHandler_.add(errorhandler::err::OPERATION_NOT_SUPPORTED, first_token->second,
+                                              ft->second);
                             first_token = ft;
                         }
                     }
@@ -106,11 +107,12 @@ void Computor_v1::PrintErrors() {
 }
 
 #if defined(UNIT_TESTS)
-bool TestComputor_v1::TestLexicalAnalyzer(Computor_v1& computorV1) {
+
+bool TestComputor_v1::TestLexicalAnalyzer(Computor_v1 &computorV1) {
     return computorV1.LexicalAnalyzer();
 };
 
-bool TestComputor_v1::TestSyntaxAnalyzer(Computor_v1& computorV1) {
+bool TestComputor_v1::TestSyntaxAnalyzer(Computor_v1 &computorV1) {
     return computorV1.SyntaxAnalyzer();
 };
 
