@@ -11,8 +11,8 @@ int main(int argc, char* argv[]) {
                   << "Example: " << "./computor_v1 \"5 * X^0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0\"\n";
         exit(EXIT_FAILURE);
     }
-    std::stringstream ss(argv[1]);
-    Computor_v1 computorV1(std::move(ss));
+    std::stringstream ss(argv[1]);;
+    Computor_v1 computorV1(ss);
     if (!computorV1.Analyzer()) {
         computorV1.PrintErrors();
     } else {

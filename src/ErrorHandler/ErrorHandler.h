@@ -10,6 +10,9 @@
 #include <iostream>
 #include <iomanip>
 #include <sstream>
+#include <vector>
+#include <algorithm>
+#include <iterator>
 
 namespace {
     // Formatting
@@ -22,6 +25,7 @@ namespace {
     constexpr const char* kSyntaxErrorFirstCharacter = "Expected \'number\' or \'X\' or \'x\'";
     constexpr const char* kSyntaxErrorLastCharacter = "Invalid character at the end of an equation";
     constexpr const char* kSyntaxErrorTwoEquals = "Two equals in equation";
+    constexpr const char* kIncorrectEntry = "Incorrect entry";
 
     const size_t kLenRed = std::strlen(kRed);
     const size_t kLenNormal = std::strlen(kNormal);
@@ -30,6 +34,7 @@ namespace {
     const size_t kLenSyntaxError1 = std::strlen(kSyntaxErrorFirstCharacter);
     const size_t kLenSyntaxErrorLastCharacter = std::strlen(kSyntaxErrorLastCharacter);
     const size_t kLenSyntaxErrorTwoEquals = std::strlen(kSyntaxErrorTwoEquals);
+    const size_t kLenIncorrectEntry = std::strlen(kIncorrectEntry);
 
 }
 
@@ -38,8 +43,14 @@ namespace errorhandler {
         INVALID_CHARACTER,
         INVALID_FIRST_CHARACTER,
         INVALID_LAST_CHARACTER,
-        TWO_EQUALS
+        TWO_EQUALS,
+        INCORRECT_ENTRY
     };
+
+    size_t getLensError(errorhandler::err e);
+
+    const char * getError(errorhandler::err e);
+
 }
 
 #if defined(UNIT_TESTS)
@@ -52,7 +63,8 @@ public:
     TestErrorHandler& operator=(const TestErrorHandler&) = delete;
     ~TestErrorHandler() = default;
 
-    const std::string& TestAdd(ErrorHandler& errorHandler_, errorhandler::err err, size_t pos);
+    const std::pair<std::string, errorhandler::err>& TestAdd(ErrorHandler& errorHandler_, errorhandler::err err, size_t pos);
+    const std::pair<std::string, errorhandler::err>& TestAdd(ErrorHandler& errorHandler_, errorhandler::err err, size_t first, size_t last);
 };
 #endif
 
@@ -61,20 +73,21 @@ class ErrorHandler {
     friend class TestErrorHandler;
 #endif
 public:
-    explicit ErrorHandler(const std::string &str);
+    explicit ErrorHandler(const std::string &tokens);
 
     ErrorHandler(const ErrorHandler&) = delete;
     ErrorHandler& operator=(const ErrorHandler&) = delete;
     ~ErrorHandler() = default;
 
     void add(errorhandler::err, size_t);
+    void add(errorhandler::err, size_t, size_t);
     void PrintErrors();
     bool empty() {
         return errors.empty();
     };
 private:
-    std::list<std::string> errors;
-    std::string str;
+    std::list<std::pair<std::string, errorhandler::err>> errors;
+    std::string tokens_;
 };
 
 

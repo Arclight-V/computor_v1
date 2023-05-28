@@ -5,8 +5,7 @@
 #ifndef COMPUTOR_V1_COMPUTOR_H
 #define COMPUTOR_V1_COMPUTOR_H
 
-#include <string>
-#include <sstream>
+
 
 class Computor {
 public:
@@ -14,8 +13,9 @@ public:
     virtual void PrintErrors() = 0;
     virtual ~Computor() = default;
 private:
-    virtual bool LexicalAnalyzer(const std::string& str) = 0;
+    virtual bool LexicalAnalyzer() = 0;
     virtual bool SyntaxAnalyzer() = 0;
+    virtual bool isArithmeticOperator(const char ch) = 0;
 };
 
 #endif //COMPUTOR_V1_COMPUTOR_H
