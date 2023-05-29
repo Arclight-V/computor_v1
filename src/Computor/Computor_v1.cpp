@@ -17,6 +17,7 @@ bool Computor_v1::Analyzer() {
     if (!errorHandler_.empty()) {
         return false;
     }
+    TransferTokens();
 
     return true;
 }
@@ -104,6 +105,20 @@ bool Computor_v1::isArithmeticOperator(const char ch) {
 
 void Computor_v1::PrintErrors() {
     errorHandler_.PrintErrors();
+}
+
+void Computor_v1::TransferTokens() {
+    size_t pos = std::distance(tokens_.begin(), std::find_if(tokens_.begin(), tokens_.end(), [&](auto &p) {
+                                                                 return p.first == '=';
+                                                             }
+    ));
+    // TODO:: add realisation
+    if (pos % tokens_.size() >= tokens_.size() / 2) {
+        std::cout << true  << '\n';
+    } else {
+        std::cout << false << '\n';
+    }
+
 }
 
 #if defined(UNIT_TESTS)
