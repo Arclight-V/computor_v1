@@ -8,6 +8,7 @@
 #include <iostream>
 #include <vector>
 #include <array>
+#include <list>
 
 #include "Computor/Computor.h"
 #include "ErrorHandler/ErrorHandler.h"
@@ -56,7 +57,7 @@ private:
     bool SyntaxAnalyzer() override;
     bool isArithmeticOperator(const char ch) override;
 
-    void TransferTokens();
+    void Transform();
 
     using iterator = std::list<std::pair<token , position >>::iterator;
     std::list<std::pair<token, position>> tokens_;

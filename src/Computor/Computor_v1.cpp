@@ -3,7 +3,7 @@
 //
 
 #include "Computor/Computor_v1.h"
-#include <list>
+#include <algorithm>
 
 Computor_v1::Computor_v1(std::stringstream &ss) : errorHandler_(ss.str()) {
     for (auto begin = std::istream_iterator<char>(ss), end = std::istream_iterator<char>(); begin != end; ++begin) {
@@ -17,7 +17,7 @@ bool Computor_v1::Analyzer() {
     if (!errorHandler_.empty()) {
         return false;
     }
-    TransferTokens();
+    Transform();
 
     return true;
 }
@@ -106,19 +106,40 @@ bool Computor_v1::isArithmeticOperator(const char ch) {
 void Computor_v1::PrintErrors() {
     errorHandler_.PrintErrors();
 }
-
-void Computor_v1::TransferTokens() {
+// TODO::add unit tests
+void Computor_v1::Transform() {
     size_t pos = std::distance(tokens_.begin(), std::find_if(tokens_.begin(), tokens_.end(), [&](auto &p) {
                                                                  return p.first == '=';
                                                              }
     ));
-    // TODO:: add realisation
+    auto trans = [&](auto& it) {
+        if (it.first == '-') {
+            it.first = '+';
+        } else if (it.first == '+') {
+            it.first = '+';
+        }
+    };
+    auto trans_equal = [&](auto& first, auto& second) {
+        if (std::isdigit(second) || second == 'X' || second == 'x') {
+            first = '-';
+        }
+    };
     if (pos % tokens_.size() >= tokens_.size() / 2) {
-        std::cout << true  << '\n';
+        iterator it{std::next(tokens_.begin(), pos + 1)};
+        iterator it2{std::next(tokens_.begin(), pos)};
+        trans_equal(it2->first, it->first);
+        std::for_each(it, tokens_.end(),  trans);
     } else {
-        std::cout << false << '\n';
+        iterator it{std::next(tokens_.begin(), pos - 1)};
+        iterator it2{std::next(tokens_.begin(), pos)};
+        trans_equal(it->first, it2->first);
+        std::for_each(tokens_.begin(), it,  trans);
     }
 
+    std::for_each(tokens_.begin(), tokens_.end(), [](auto &token) {
+        std::cout << token.first << ' ';
+    });
+    std::cout << '\n';
 }
 
 #if defined(UNIT_TESTS)
