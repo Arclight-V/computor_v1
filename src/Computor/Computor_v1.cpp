@@ -106,40 +106,63 @@ bool Computor_v1::isArithmeticOperator(const char ch) {
 void Computor_v1::PrintErrors() {
     errorHandler_.PrintErrors();
 }
+
 // TODO::add unit tests
 void Computor_v1::Transform() {
     size_t pos = std::distance(tokens_.begin(), std::find_if(tokens_.begin(), tokens_.end(), [&](auto &p) {
                                                                  return p.first == '=';
                                                              }
     ));
-    auto trans = [&](auto& it) {
+    auto trans = [&](auto &it) {
         if (it.first == '-') {
             it.first = '+';
         } else if (it.first == '+') {
             it.first = '+';
         }
     };
-    auto trans_equal = [&](auto& first, auto& second) {
+    auto trans_equal = [&](auto &first, auto &second) {
         if (std::isdigit(second) || second == 'X' || second == 'x') {
             first = '-';
         }
     };
     if (pos % tokens_.size() >= tokens_.size() / 2) {
-        iterator it{std::next(tokens_.begin(), pos + 1)};
-        iterator it2{std::next(tokens_.begin(), pos)};
-        trans_equal(it2->first, it->first);
-        std::for_each(it, tokens_.end(),  trans);
+        iterator second_it{std::next(tokens_.begin(), pos + 1)};
+        iterator first_it{std::next(tokens_.begin(), pos)};
+        trans_equal(first_it->first, second_it->first);
+        std::for_each(second_it, tokens_.end(), trans);
     } else {
-        iterator it{std::next(tokens_.begin(), pos - 1)};
-        iterator it2{std::next(tokens_.begin(), pos)};
-        trans_equal(it->first, it2->first);
-        std::for_each(tokens_.begin(), it,  trans);
+        iterator previous_it{std::next(tokens_.begin(), pos - 1)};
+        iterator first_it{std::next(tokens_.begin(), pos)};
+        trans_equal(previous_it->first, first_it->first);
+        std::for_each(tokens_.begin(), previous_it, trans);
     }
 
     std::for_each(tokens_.begin(), tokens_.end(), [](auto &token) {
         std::cout << token.first << ' ';
     });
     std::cout << '\n';
+    print();
+}
+
+void Computor_v1::print() {
+    std::ostringstream os;
+    os << tokens_.begin()->first;
+
+    for (iterator second = std::next(tokens_.begin(), 1); second != tokens_.end(); ++second) {
+        if (second->first == '^' || second->first == '.') {
+            os << second->first;
+        } else if (os.str().back() == '^' || os.str().back() == '.') {
+            os << second->first;
+        } else {
+            os << ' ' << second->first;
+        }
+    }
+    os << " = 0";
+
+    std::cout << os.str() << '\n';
+
+
+
 }
 
 #if defined(UNIT_TESTS)

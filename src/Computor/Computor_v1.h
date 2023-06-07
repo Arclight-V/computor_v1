@@ -56,8 +56,10 @@ private:
     bool LexicalAnalyzer() override;
     bool SyntaxAnalyzer() override;
     bool isArithmeticOperator(const char ch) override;
+    void print() override;
 
     void Transform();
+
 
     using iterator = std::list<std::pair<token , position >>::iterator;
     std::list<std::pair<token, position>> tokens_;
